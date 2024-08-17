@@ -1,0 +1,44 @@
+name: Add Issue to Kanban with Custom Title
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-to-kanban:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update issue title with custom format
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issue_number = context.payload.issue.number;
+            const issue_title = context.payload.issue.title;
+            const custom_title = `#GRUPOX-${String(issue_number).padStart(2, '0')} ${issue_title}`;
+            
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              title: custom_title
+            });
+        
+      - name: Add issue to Kanban project
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const project_id = 'PVT_kwHOBClUws4AmYA-';
+            const content_id = context.payload.issue.node_id;
+            const mutation = `
+              mutation {
+                addProjectV2ItemById(input: {projectId: "${project_id}", contentId: "${content_id}"}) {
+                  item {
+                    id
+                  }
+                }
+              }
+            `;
+            const result = await github.graphql(mutation);
+            console.log(result);
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
