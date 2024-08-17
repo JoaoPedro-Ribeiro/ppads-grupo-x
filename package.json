@@ -1,0 +1,25 @@
+{
+  "name": "ppads-grupo-x",
+  "version": "1.0.0",
+  "description": "Monorepo responsavel pela aplicacao web de controle de estoque de biblioteca do projeto de analise e desenvolvimento de sistemas",
+  "main": "index.js",
+  "repository": "https://github.com/JoaoPedro-Ribeiro/ppads-grupo-x.git",
+  "contributors": [
+    {
+      "name": "João Pedro Ribeiro",
+      "email": "10407093@mackenzista.com.br"
+    },
+    {
+      "name": "Jonatas Souza de Moraes",
+      "email": "10408389@mackenzista.com.br"
+    }
+  ],
+  "license": "MIT",
+  "private": true,
+  "workspaces":{
+    "packages": [
+      "packages/*",
+      "packages/shared/*"
+    ]
+  }
+}
