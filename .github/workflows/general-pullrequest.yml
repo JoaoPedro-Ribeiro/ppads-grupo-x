@@ -12,10 +12,15 @@ jobs:
     - name: Check out the code
       uses: actions/checkout@v3
 
-    - name: Set up GitHub CLI
-      uses: cli/cli-action@v1
-      with:
-        github-token: ${{ secrets.PAT_TOKEN }}
+    - name: Install GitHub CLI
+      run: |
+        sudo apt update
+        sudo apt install gh -y
+
+    - name: Authenticate GitHub CLI
+      run: gh auth setup-git
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     - name: Get list of changed files
       id: changed-files
