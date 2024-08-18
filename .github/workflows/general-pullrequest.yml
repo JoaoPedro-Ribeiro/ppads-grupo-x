@@ -48,7 +48,7 @@ jobs:
         PR_NUMBER=${{ github.event.pull_request.number }}
         
         # Update branch protection settings
-        gh api --method PATCH /repos/$GITHUB_REPOSITORY/branches/main/protection \
+        gh api --method PATCH /repos/$GITHUB_REPOSITORY/branches/master/protection \
           -f required_approving_review_count=1
         
         # Request default reviewers
@@ -60,7 +60,7 @@ jobs:
     - name: Check and Enforce branch protection
       if: env.FILES_CHANGED == 'false'
       run: |
-        gh api --method PATCH /repos/$GITHUB_REPOSITORY/branches/main/protection \
+        gh api --method PATCH /repos/$GITHUB_REPOSITORY/branches/master/protection \
           -f required_approving_review_count=1 
       env:
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
