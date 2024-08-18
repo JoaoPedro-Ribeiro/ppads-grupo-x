@@ -40,7 +40,7 @@ jobs:
         # Add default reviewers
         gh pr review $PR_NUMBER --request-reviewer barbosarebc,gitmantovani,LevitaSofia,JoaoPedro-Ribeiro,kaiquemota
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
     
     - name: Remove PR author from reviewers
       if: env.FILES_CHANGED == 'false'
@@ -50,7 +50,7 @@ jobs:
           gh pr review ${{ github.event.pull_request.number }} --remove-reviewer $PR_AUTHOR
         fi
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     - name: Check and Enforce branch protection
       if: env.FILES_CHANGED == 'true'
