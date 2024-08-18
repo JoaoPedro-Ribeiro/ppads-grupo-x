@@ -12,12 +12,19 @@ jobs:
     - name: Check out the code
       uses: actions/checkout@v3
 
+    - name: Set up GitHub CLI
+      uses: cli/cli-action@v1
+      with:
+        github-token: ${{ secrets.PAT_TOKEN }}
+
     - name: Get list of changed files
       id: changed-files
       run: |
-        # Get list of changed files
         PR_NUMBER=${{ github.event.pull_request.number }}
-        CHANGED_FILES=$(gh pr diff $PR_NUMBER | grep '^diff --git' | sed 's/^diff --git a\///' | awk '{print $1}')
+        BASE_REF=${{ github.event.pull_request.base.ref }}
+        HEAD_REF=${{ github.event.pull_request.head.ref }}
+
+        CHANGED_FILES=$(gh pr diff $PR_NUMBER --base $BASE_REF --head $HEAD_REF | grep '^diff --git' | sed 's/^diff --git a\///' | awk '{print $1}')
         
         # Check if any of the changed files are in the /package directory
         echo "Changed files: $CHANGED_FILES"
@@ -34,8 +41,11 @@ jobs:
       if: env.FILES_CHANGED == 'false'
       run: |
         PR_NUMBER=${{ github.event.pull_request.number }}
+        
+        # Update branch protection settings
         gh api --method PATCH /repos/$GITHUB_REPOSITORY/branches/main/protection \
-          -F required_approving_review_count=1
+          -f required_approving_review_count=1
+        
         # Request default reviewers
         gh api --method POST /repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/requested_reviewers \
           -f reviewers=barbosarebc,gitmantovani,LevitaSofia,JoaoPedro-Ribeiro,kaiquemota
@@ -46,6 +56,6 @@ jobs:
       if: env.FILES_CHANGED == 'false'
       run: |
         gh api --method PATCH /repos/$GITHUB_REPOSITORY/branches/main/protection \
-          -F required_approving_review_count=1 
+          -f required_approving_review_count=1 
       env:
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
