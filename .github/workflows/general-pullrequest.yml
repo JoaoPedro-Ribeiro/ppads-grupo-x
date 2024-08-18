@@ -12,12 +12,6 @@ jobs:
     - name: Check out the code
       uses: actions/checkout@v3
 
-    - name: Install GitHub CLI
-      run: |
-        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /usr/share/keyrings/githubcli-archive-keyring.gpg
-        sudo apt update
-        sudo apt install gh
-
     - name: Get list of changed files
       id: changed-files
       run: |
@@ -35,23 +29,6 @@ jobs:
           echo "No changes in /package directory"
           echo "FILES_CHANGED=false" >> $GITHUB_ENV
         fi
-
-    - name: Remove PR author from reviewers
-      if: env.FILES_CHANGED == 'false'
-      run: |
-        PR_NUMBER=${{ github.event.pull_request.number }}
-        PR_AUTHOR=$(gh pr view $PR_NUMBER --json author --jq '.author.login')
-        if [ -n "$PR_AUTHOR" ]; then
-          # Get current reviewers
-          REVIEWERS=$(gh api /repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviewers --jq '.users[].login')
-          for REVIEWER in $REVIEWERS; do
-            if [ "$REVIEWER" = "$PR_AUTHOR" ]; then
-              gh api --method DELETE /repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/requested_reviewers --field reviewers=$PR_AUTHOR
-            fi
-          done
-        fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     - name: Set PR approval requirements
       if: env.FILES_CHANGED == 'false'
