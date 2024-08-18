@@ -45,18 +45,18 @@ jobs:
       run: |
         #TO-DO DEPLOY
       env:
-        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       
     - name: Frontend Validations
       if: env.WEB_FILES_CHANGED == 'true'
       run: |
         #TO-DO DEPLOY
       env:
-        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     - name: Check and Enforce branch protection
       run: |
         gh api --method PATCH /repos/${{ github.repository }}/branches/master/protection \
           -f required_approving_review_count=1 
       env:
-        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
