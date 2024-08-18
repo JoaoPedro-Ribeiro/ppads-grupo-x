@@ -18,9 +18,9 @@ jobs:
         sudo apt install gh -y
 
     - name: Authenticate GitHub CLI
-      run: gh auth setup-git
+      run: gh auth login --with-token
       env:
-        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     - name: Get list of changed files
       id: changed-files
@@ -48,19 +48,19 @@ jobs:
         PR_NUMBER=${{ github.event.pull_request.number }}
         
         # Update branch protection settings
-        gh api --method PATCH /repos/$GITHUB_REPOSITORY/branches/master/protection \
+        gh api --method PATCH /repos/${{ github.repository }}/branches/master/protection \
           -f required_approving_review_count=1
         
         # Request default reviewers
-        gh api --method POST /repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/requested_reviewers \
+        gh api --method POST /repos/${{ github.repository }}/pulls/$PR_NUMBER/requested_reviewers \
           -f reviewers=barbosarebc,gitmantovani,LevitaSofia,JoaoPedro-Ribeiro,kaiquemota
       env:
-        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     - name: Check and Enforce branch protection
       if: env.FILES_CHANGED == 'false'
       run: |
-        gh api --method PATCH /repos/$GITHUB_REPOSITORY/branches/master/protection \
+        gh api --method PATCH /repos/${{ github.repository }}/branches/master/protection \
           -f required_approving_review_count=1 
       env:
-        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
