@@ -1,11 +1,11 @@
 import React from 'react';
-import "./Login.css";
+import "./Formlogin.css";
 
 import { useState } from 'react';
 
-//verificar bug de não receber os dados se a pessoa usa as sugestões do navegador
-//aplicar validações para o preenchimento dos campos
-const Login = () => {
+//TO DO: verificar bug de não receber os dados se a pessoa usa as sugestões do navegador
+//TO DO: aplicar validações para o preenchimento dos campos
+const Formlogin = () => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -47,4 +47,4 @@ const Login = () => {
     )
   }
 
-export default Login
+export default Formlogin

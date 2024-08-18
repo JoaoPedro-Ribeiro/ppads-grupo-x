@@ -9,26 +9,26 @@ main {
     justify-content: space-between;
     align-items: center;
     min-height: 100vh;
-    background-image: url("assets/backgroundimage.png");
+    background-image: url("../../Assets/backgroundimage.png");
     background-size: cover;
     background-position: center;
 }
 
-.App{
+.Login {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.App h1 {
+.Login h1 {
     color: #FFFFFF;
     font-size: 120px;
     margin-bottom: 400px;
     margin-left: 400px;
 }
 
-.Login {
+.formLogin {
     margin-bottom: 150px;
     margin-right: 400px;
 }
