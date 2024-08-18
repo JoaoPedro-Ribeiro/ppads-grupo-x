@@ -55,7 +55,6 @@ jobs:
         PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     - name: Check and Enforce branch protection
-      if: env.FILES_CHANGED == 'false'
       run: |
         gh api --method PATCH /repos/${{ github.repository }}/branches/master/protection \
           -f required_approving_review_count=1 
