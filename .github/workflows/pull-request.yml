@@ -12,6 +12,16 @@ jobs:
     - name: Check out the code
       uses: actions/checkout@v3
 
+    - name: Install GitHub CLI
+      run: |
+        sudo apt update
+        sudo apt install gh -y
+
+    - name: Authenticate GitHub CLI
+      run: gh auth login --with-token
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+
     - name: Get list of changed files
       id: changed-files
       run: |
