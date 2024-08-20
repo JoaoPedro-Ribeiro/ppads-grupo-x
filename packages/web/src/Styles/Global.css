@@ -4,11 +4,19 @@
     box-sizing: border-box;
 }
 
+:root {
+    --branco: #FFFFFF;
+    --preto: #000000;
+    --cinza-escuro: #1E1D1D;
+    --cinza-medio: #5A5A5A;
+    --cinza-claro: #D9D9D9;
+}
+
 body {
     width: 100vw;
     height: 100vh;
-    background-color: #000000;
+    background-color: var(--branco);
     font-family: Yantramanav;
-    color: #FFFFFF;
+    color: var(--preto);
     font-size: 24px;
 }
