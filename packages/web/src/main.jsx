@@ -1,4 +1,6 @@
 import { createRoot } from 'react-dom/client'
-import Login from './Pages/Login/Login.jsx'
+import App from "./App.jsx"
 
-createRoot(document.getElementById('root')).render(<Login/>)
+const root = createRoot(document.getElementById('root'));
+
+root.render(<App />)
