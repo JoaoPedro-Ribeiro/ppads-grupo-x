@@ -2,10 +2,6 @@ import './Login.css'
 
 import { useState } from 'react';
 
-//TO DO: verificar bug de não receber os dados se a pessoa usa as sugestões do navegador
-//TO DO: aplicar validações para o preenchimento dos campos
-
-
 const Login = () => {
   const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
