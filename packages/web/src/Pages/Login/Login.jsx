@@ -1,0 +1,53 @@
+import './Login.css'
+
+import { useState } from 'react';
+
+//TO DO: verificar bug de não receber os dados se a pessoa usa as sugestões do navegador
+//TO DO: aplicar validações para o preenchimento dos campos
+
+
+const Login = () => {
+  const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        console.log(username, password)
+
+        console.log("Envio");
+    }
+
+  return (
+  <main>
+    <div className='Login'>
+      <h1>OLÁ,<br></br>BIBLIOTECÁRIO(A)!</h1>
+      <div className='formLogin'>
+        <div className='container'>
+          <form onSubmit={handleSubmit}>
+          <h2>LOGIN</h2>
+          <div className='input-field'>
+            <input type='email' placeholder='EMAIL' onChange={(e) => setUsername(e.target.value)}></input>
+          </div>
+          <div className='input-field'>
+            <input type='password' placeholder='SENHA' onChange={(e) => setPassword(e.target.value)}></input>
+          </div>
+
+          <div className="recall-forget">
+            <label>
+              <input type="checkbox" />
+              MANTER CONECTADO
+            </label>
+            <a href="/redefine">ESQUECEU A SENHA?</a>
+          </div>
+
+          <button>ENTRAR</button>
+          </form>
+        </div>  
+      </div>
+    </div>
+  </main>
+  )
+}
+
+export default Login
