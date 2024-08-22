@@ -1,10 +1,9 @@
-name: PullRequest Review
+name: Merge Master
 
-# on:
-#   pull_request:
-#     types: [opened, edited]
-
-on: [workflow_dispatch]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   review:
@@ -47,16 +46,15 @@ jobs:
         echo "SERVER_FILES_CHANGED=$SERVER_FILES_CHANGED" >> $GITHUB_ENV
         echo "WEB_FILES_CHANGED=$WEB_FILES_CHANGED" >> $GITHUB_ENV
 
-    - name: Backend Validations
+    - name: Backend Validations and Deploy
       if: env.SERVER_FILES_CHANGED == 'true'
       run: |
         #TO-DO DEPLOY
       env:
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       
-    - name: Frontend Validations
+    - name: Frontend Validations and Deploy
       if: env.WEB_FILES_CHANGED == 'true'
-      run: |
-        #TO-DO DEPLOY
+      uses: ./.github/workflows/frontend-deploy-prd.yml
       env:
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
