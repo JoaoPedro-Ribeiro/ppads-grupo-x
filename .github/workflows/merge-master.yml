@@ -13,11 +13,6 @@ jobs:
     - name: Check out the code
       uses: actions/checkout@v3
 
-    - name: Install GitHub CLI
-      run: |
-        sudo apt update
-        sudo apt install gh -y
-
     - name: Backend Validations and Deploy
       run: |
         #TO-DO DEPLOY
@@ -25,4 +20,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       
     - name: Frontend Validations and Deploy
-      uses: ./.github/workflows/frontend-deploy-prd.yml@master
+      uses: ./.github/workflows/frontend-deploy-prd
