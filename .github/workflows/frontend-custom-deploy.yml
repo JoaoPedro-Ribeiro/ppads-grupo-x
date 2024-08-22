@@ -46,7 +46,7 @@ jobs:
 
       - name: Deploy to Preview
         if: ${{ github.event.inputs.environment }} == 'preview'
-        run: vercel deploy --prebuild --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prebuild --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to Production
         if: ${{ github.event.inputs.environment }} == 'production'
