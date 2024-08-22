@@ -1,0 +1,60 @@
+name: PullRequest Review
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Install GitHub CLI
+      run: |
+        sudo apt update
+        sudo apt install gh -y
+
+    - name: Get list of changed files
+      id: changed-files
+      run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        BASE_REF=${{ github.event.pull_request.base.ref }}
+        HEAD_REF=${{ github.event.pull_request.head.ref }}
+
+        # Obter lista de arquivos alterados no PR
+        CHANGED_FILES=$(gh pr diff $PR_NUMBER --base $BASE_REF --head $HEAD_REF | grep '^diff --git' | sed 's/^diff --git a\///' | awk '{print $1}')
+
+        # Inicializar variáveis de ambiente
+        SERVER_FILES_CHANGED=false
+        WEB_FILES_CHANGED=false
+
+        # Verificar se há mudanças na pasta /package/server
+        if echo "$CHANGED_FILES" | grep -q '^package/server/'; then
+          SERVER_FILES_CHANGED=true
+        fi
+
+        # Verificar se há mudanças nas pastas /package/web ou /package/shared
+        if echo "$CHANGED_FILES" | grep -q '^package/web/' || echo "$CHANGED_FILES" | grep -q '^package/shared/'; then
+          WEB_FILES_CHANGED=true
+        fi
+
+        # Definir variáveis de ambiente
+        echo "SERVER_FILES_CHANGED=$SERVER_FILES_CHANGED" >> $GITHUB_ENV
+        echo "WEB_FILES_CHANGED=$WEB_FILES_CHANGED" >> $GITHUB_ENV
+
+    - name: Backend Validations
+      if: env.SERVER_FILES_CHANGED == 'true'
+      run: |
+        #TO-DO DEPLOY
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+      
+    - name: Frontend Validations
+      if: env.WEB_FILES_CHANGED == 'true'
+      run: |
+        #TO-DO DEPLOY
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
