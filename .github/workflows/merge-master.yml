@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Check out the code
       uses: actions/checkout@v3
+      with:
+          ref: master
 
     - name: Backend Validations and Deploy
       run: |
@@ -20,4 +22,17 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       
     - name: Frontend Validations and Deploy
-      uses: JoaoPedro-Ribeiro/ppads-grupo-x/.github/workflows/frontend-deploy-prd.yml@master
+      run:  |
+        echo "VERCEL DEPLOY IN PRD STARTING"
+
+        echo "Install Vercel CLI"
+        npm install --global vercel
+
+        echo "Pull Vercel Environment Information"
+        vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+        echo "Build Project Artifacts"
+        vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+        echo "Deploy to Production"
+        vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
