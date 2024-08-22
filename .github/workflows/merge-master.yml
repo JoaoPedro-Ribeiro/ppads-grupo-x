@@ -25,6 +25,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       
     - name: Frontend Validations and Deploy
-      uses: ./.github/workflows/frontend-deploy-prd.yml
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+      uses: ./.github/workflows/frontend-deploy-prd@master
