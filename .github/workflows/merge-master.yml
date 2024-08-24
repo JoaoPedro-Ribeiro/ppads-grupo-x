@@ -15,24 +15,18 @@ jobs:
       with:
           ref: master
 
-    - name: Backend Validations and Deploy
-      run: |
-        #TO-DO DEPLOY
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-      
     - name: Frontend Validations and Deploy
       run:  |
         echo "VERCEL DEPLOY IN PRD STARTING"
 
-        echo "Install Vercel CLI"
+        echo -e "\nInstall Vercel CLI"
         npm install --global vercel
 
-        echo "Pull Vercel Environment Information"
+        echo -e "\nPull Vercel Environment Information"
         vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
-        echo "Build Project Artifacts"
+        echo -e "\nBuild Project Artifacts"
         vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-        echo "Deploy to Production"
+        echo -e "\nDeploy to Production"
         vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
