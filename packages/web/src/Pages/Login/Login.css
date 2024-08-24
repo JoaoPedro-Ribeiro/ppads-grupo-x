@@ -1,35 +1,27 @@
-
 main {
     display: flex;
     justify-content: space-between;
     align-items: center;
     min-height: 100vh;
-    background-image: url("../../Assets/backgroundimage.png");
+    background-image: url("../../Assets/backgroundlogin.png");
     background-size: cover;
     background-position: center;
 }
 
-.Login {
+.LoginPage {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.Login h1 {
-    color: var(--branco);
-    font-size: 120px;
-    margin-bottom: 400px;
-    margin-left: 400px;
-}
-
 .formLogin {
-    margin-bottom: 150px;
-    margin-right: 400px;
+    margin-bottom: 40px;
+    margin-right: 200px;
 }
 
 .container {
-    width: 450px;
+    width: 400px;
     height: 550px;
     background-color: #1E1D1D;
     border-radius: 40px;
@@ -38,16 +30,16 @@ main {
 
 .container h2 {
     text-align: center;
-    font-size: 50px;
+    font-size: 55px;
     color: var(--branco);
-    margin: 0px 120px 0px 120px;
+    margin-bottom: 30px;
 }
 
 .container .input-field {
     position: relative;
     width: 100%;
-    height: 50px;
-    margin: 20px auto;
+    height: 40px;
+    margin: 10px auto;
 }
 
 .input-field input {
@@ -58,14 +50,14 @@ main {
     background-color: var(--cinza-claro);
     color: var(--cinza-escuro);
     padding: 15px;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .container .recall-forget {
     display: flex; 
     justify-content: space-between;
     font-size: 14px;
-    margin: -5px 6px 100px;
+    margin: 10px 6px 130px;
 }
 
 .recall-forget label {
