@@ -51,6 +51,7 @@ jobs:
       if: env.SERVER_FILES_CHANGED == 'true'
       run: |
         #TO-DO DEPLOY
+        #TO-DO config postgreSQL
       env:
         GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       
