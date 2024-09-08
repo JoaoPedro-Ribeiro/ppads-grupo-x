@@ -1,18 +1,17 @@
-import './Login.css'
-
 import { useState } from 'react';
+import './Login.css'
 
 const Login = () => {
   const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("");
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+  const handleSubmit = (event) => {
+      event.preventDefault();
 
-        console.log(username, password)
+      console.log(username, password)
 
-        console.log("Envio");
-    }
+      console.log("Envio");
+  }
 
   return (
   <main>
