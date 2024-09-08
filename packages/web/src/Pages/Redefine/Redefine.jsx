@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Logintitle from '../../Components/Logintitle/Logintitle';
 import './Redefine.css'
 
 const Redefine = () => {
@@ -14,8 +15,8 @@ const Redefine = () => {
 
   return (
   <main>
-    <div className='Login'>
-      <h1>OLÁ,<br></br>BIBLIOTECÁRIO(A)!</h1>
+    <div className='redefinePage'>
+      <Logintitle />
       <div className='formRedefine'>
         <div className='containerRedefine'>
           <form onSubmit={handleSubmit}>

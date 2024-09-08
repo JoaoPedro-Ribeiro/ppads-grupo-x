@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Logintitle from '../../Components/Logintitle/Logintitle';
 import './Login.css'
 
 const Login = () => {
@@ -15,8 +16,8 @@ const Login = () => {
 
   return (
   <main>
-    <div className='Login'>
-      <h1>OLÁ,<br></br>BIBLIOTECÁRIO(A)!</h1>
+    <div className='LoginPage'>
+      <Logintitle />
       <div className='formLogin'>
         <div className='container'>
           <form onSubmit={handleSubmit}>
