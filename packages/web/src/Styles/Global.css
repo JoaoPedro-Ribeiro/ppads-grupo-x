@@ -17,6 +17,6 @@ body {
     height: 100vh;
     background-color: var(--branco);
     font-family: Yantramanav;
-    color: var(--preto);
+    color: var(--branco);
     font-size: 24px;
 }

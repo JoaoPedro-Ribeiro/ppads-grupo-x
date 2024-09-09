@@ -70,7 +70,8 @@ main {
     cursor: pointer;
 }
 
-.recall-forget a {    color: var(--branco);
+.recall-forget a {    
+    color: var(--branco);
     text-decoration: none;
 }
 

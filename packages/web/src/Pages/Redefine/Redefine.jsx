@@ -1,8 +1,6 @@
+import { useState } from 'react';
 import Logintitle from '../../Components/Logintitle/Logintitle';
 import './Redefine.css'
-import { useState } from 'react';
-
-
 
 const Redefine = () => {
     const [username, setUsername] = useState("");;
