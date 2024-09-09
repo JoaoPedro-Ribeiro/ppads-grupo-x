@@ -1,0 +1,31 @@
+.Icon {
+    background-color: var(--cinza-escuro);
+    border-radius: 20px;
+    margin: 20px
+}
+
+.drawer {
+    background-color: var(--cinza-escuro) !important; 
+    width: 200px;
+    font-size: 10px;
+    padding: 20px 0px;
+    margin: 20px;
+    border-radius: 20px;
+    height: 800px !important; 
+}
+
+.drawer-text {
+    color: var(--branco);
+}
+
+.drawer-item {
+    height: 20px;
+}
+
+.drawer-item :hover{
+    cursor: pointer;
+}
+
+.drawer::-webkit-scrollbar {
+    width: 0px;
+}
