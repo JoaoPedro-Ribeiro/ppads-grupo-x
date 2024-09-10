@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Logintitle from '../../Components/Logintitle/Logintitle';
 import './Login.css'
+import api from '../../services/axios';
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -12,6 +13,19 @@ const Login = () => {
       console.log(username, password)
 
       console.log("Envio");
+  }
+
+  // Isso é um exemplo ;)
+  const handleTestLink = async (event) => {
+    event.preventDefault()
+
+    try {
+      const url = 'https://ppads-grupo-x.onrender.com'
+      const response = await api.get(`${url}`)
+      console.log('Resposta da API: ', response.data)
+    } catch (error) {
+      console.error('Error ao fazer requisição: ', error)
+    }
   }
 
   return (
@@ -34,7 +48,7 @@ const Login = () => {
               <input type="checkbox" />
               MANTER CONECTADO
             </label>
-            <a href="/redefine">ESQUECEU A SENHA?</a>
+            <a href="/redefine" onClick={handleTestLink}>ESQUECEU A SENHA?</a>
           </div>
 
           <button>ENTRAR</button>
