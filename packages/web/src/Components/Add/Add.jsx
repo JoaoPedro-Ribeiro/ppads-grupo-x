@@ -57,12 +57,12 @@ function Add() {
                                 <p>IMAGEM</p>
                                 <input type="file" id="coverImage" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
                             </div>
-                            <Button PaperProps={{ className: 'confirm' }}  onClick={handleCloseModal}>CONFIRMAR</Button>
+                            <Button paperprops={{ className: 'confirm' }}  onClick={handleCloseModal}>CONFIRMAR</Button>
                         </div>
                         <div className='bodyUser'>
                             <div className="input-container">
                                 <EditIcon sx={{ color: 'var(--branco)' }} />
-                                <input type="text" autocomplete="off" placeholder="ADICIONE O NOME DO LIVRO" />
+                                <input type="text" autoComplete="off" placeholder="ADICIONE O NOME DO LIVRO" />
                             </div>
 
                             <div className="input-container">
@@ -72,10 +72,11 @@ function Add() {
                         </div>
                         <div className='bottomUser'>
                             <div className="input-bottom">
-                                <select name="select" label="CATEGORIA">
+                                <select defaultValue="OUTROS" aria-label="CATEGORIA">
                                     <option value="ADMINISTRAÇÃO">ADMINISTRAÇÃO</option>
-                                    <option value="ARTE" selected>ARTE</option>
+                                    <option value="ARTE">ARTE</option>
                                     <option value="ARTESANATO">ARTESANATO</option>
+                                    <option value="OUTROS">OUTROS</option>
                                 </select>
                             </div>
 
