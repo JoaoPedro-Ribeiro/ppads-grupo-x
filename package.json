@@ -28,10 +28,14 @@
   ],
   "license": "MIT",
   "private": true,
-  "workspaces":{
+  "workspaces": {
     "packages": [
       "packages/*",
       "packages/shared/*"
     ]
+  },
+  "dependencies": {
+    "@nestjs/mongoose": "^10.0.10",
+    "mongoose": "^8.6.2"
   }
 }
