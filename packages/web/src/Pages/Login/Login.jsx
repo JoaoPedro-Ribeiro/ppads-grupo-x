@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Logintitle from '../../Components/Logintitle/Logintitle';
 import './Login.css'
 import api from '../../services/axios';
@@ -6,27 +7,42 @@ import api from '../../services/axios';
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [stayLoggedIn, setStayLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-      event.preventDefault();
+  const handleCheckboxChange = (event) => {
+    setStayLoggedIn(event.target.checked);
+    };
 
-      console.log(username, password)
 
-      console.log("Envio");
-  }
-
-  // Isso é um exemplo ;)
-  const handleTestLink = async (event) => {
-    event.preventDefault()
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
     try {
-      const url = 'https://ppads-grupo-x.onrender.com'
-      const response = await api.get(`${url}`)
-      console.log('Resposta da API: ', response.data)
+      const url = 'https://ppads-grupo-x.onrender.com/login';
+      const loginData = {
+        email: username,
+        password: password,
+        stayLoggedIn: stayLoggedIn
+      };
+
+      const response = await api.post(url, loginData);
+
+      if (response.data.token) {
+        const jwtToken = response.data.token;
+
+        localStorage.setItem('token', jwtToken);
+
+        navigate('/home');
+      } else {
+        setErrorMessage("Login falhou. Verifique suas credenciais.");
+      }
     } catch (error) {
-      console.error('Error ao fazer requisição: ', error)
+      setErrorMessage("Erro ao fazer login. Tente novamente.");
+      console.log('Erro ao fazer login: ', error);
     }
-  }
+  };
 
   return (
   <main>
@@ -37,20 +53,21 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
           <h2>LOGIN</h2>
           <div className='input-field'>
-            <input type='email' placeholder='EMAIL' onChange={(e) => setUsername(e.target.value)}></input>
+            <input type='email' placeholder='EMAIL' onChange={(e) => setUsername(e.target.value)} value={username}></input>
           </div>
           <div className='input-field'>
-            <input type='password' placeholder='SENHA' onChange={(e) => setPassword(e.target.value)}></input>
+            <input type='password' placeholder='SENHA' onChange={(e) => setPassword(e.target.value)} value={password}></input>
           </div>
 
           <div className="recall-forget">
             <label>
-              <input type="checkbox" />
+              <input type="checkbox" onChange={handleCheckboxChange} />
               MANTER CONECTADO
             </label>
-            <a href="/redefine" onClick={handleTestLink}>ESQUECEU A SENHA?</a>
+            <a href="/redefine">ESQUECEU A SENHA?</a>
           </div>
-
+          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+          
           <button>ENTRAR</button>
           </form>
         </div>  
