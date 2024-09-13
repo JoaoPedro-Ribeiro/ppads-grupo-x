@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "8a63bb9a-034c-4345-bd06-19af3be54f3c",
+		"name": "PPADS-GRUPOX",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37888468"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Jonata\",\r\n    \"email\": \"jonata@teste.com\",\r\n    \"password\": \"teste123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-backend}}/users",
+							"host": [
+								"{{url-backend}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-backend}}/users",
+							"host": [
+								"{{url-backend}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "get /",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ppads-grupo-x.onrender.com/",
+					"protocol": "https",
+					"host": [
+						"ppads-grupo-x",
+						"onrender",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
