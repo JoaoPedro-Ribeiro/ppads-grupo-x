@@ -12,14 +12,25 @@ export class UsersService {
     newUser.id = uuid()
     newUser.password = bcrypt.hashSync(newUser.password, 10)
     
+    const isEmailAlreadyInUse = await emailValidation(newUser.email)
+
+    if (isEmailAlreadyInUse === null) {
+      return {
+        success: 'false',
+        message: 'Something went wrong'
+      }
+    }
+
+    if (isEmailAlreadyInUse) {
+      return {
+        success: 'false',
+        message: 'Email Already In Use'
+      }
+    }
+
     const { success } = await createOrUpdateUsers(newUser)
 
-    if (success){
-      console.log('User criado! -> ', newUser)
-      return {success}
-    }
-    console.log('USER -> ', newUser)
-    return null
+    return {success}
   }
 
   async findAllUsers() {
@@ -30,4 +41,14 @@ export class UsersService {
     }
     return null
   }
+}
+
+async function emailValidation(email: string) {
+  const { success, data } = await getUserByEmail(email)
+
+  if (success) {
+    return data?.email === email
+  }
+
+  return null
 }

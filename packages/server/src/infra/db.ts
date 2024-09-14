@@ -8,13 +8,10 @@ const createOrUpdateUsers = async (data = {}) => {
     Item: data
   }
 
-  console.log('Params: ', params)
-
   try {
     await db.put(params).promise()
     return { success: true}
   } catch (error) {
-    console.error('Dynamo Error: ', error)
     return { success: false}
   }
 }
@@ -32,19 +29,27 @@ const readAllUsers = async() => {
   }
 }
 
-const getUserByEmail = async (value, key = 'email') => {
+const getUserByEmail = async (email: string) => {
   const params = {
     TableName: table,
-    Key: {
-      [key]: String(value)
+    IndexName: 'EmailIndex',
+    KeyConditionExpression: 'email = :email',
+    ExpressionAttributeValues: {
+      ':email': email
     }
   }
 
   try {
-    const { Item = {} } = await db.get(params).promise()
-    return { success: true, data: Item }
+    const result = await db.query(params).promise()
+    const items = result.Items || []
+    
+    if (items.length > 0) {
+      return { success: true, data: items[0] }
+    }
+
+    return { success: true, data: null }
   } catch (error) {
-    return { success: false, data: null }
+    return { success: false, data: error }
   }
 }
 
@@ -64,11 +69,41 @@ const getUserById = async (value, key = 'id') => {
   }
 }
 
-const deleteUserByEmail = async(value, key = 'email' ) => {
+const getIdByEmail = async (email: string) => {
+  const params = {
+    TableName: table,
+    IndexName: 'EmailIndex',
+    KeyConditionExpression: 'email = :email',
+    ExpressionAttributeValues: {
+      ':email': email
+    }
+  }
+
+  try {
+    const result = await db.query(params).promise()
+    const items = result.Items || []
+
+    if (items.length > 0) {
+      return { success: true, id: items[0].id }
+    }
+
+    return { success: false, id: null }
+  } catch (error) {
+    return { success: false, id: null }
+  }
+}
+
+const deleteUserByEmail = async (email: string) => {
+  const { success, id } = await getIdByEmail(email)
+
+  if (!success || !id) {
+    return { success: false, message: 'User not found' }
+  }
+
   const params = {
     TableName: table,
     Key: {
-      [key]: String(value)
+      id: id
     }
   }
 
