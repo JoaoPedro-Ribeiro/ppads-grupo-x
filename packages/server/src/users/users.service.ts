@@ -41,6 +41,10 @@ export class UsersService {
     }
     return null
   }
+
+  findByEmail(email: string): UserDto | null {
+    return this.users.find(user => user.email === email)
+  }
 }
 
 async function emailValidation(email: string) {
