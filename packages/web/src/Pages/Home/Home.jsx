@@ -1,22 +1,22 @@
-import './App.css';
+import './Home.css';
 import Menu from '../../Components/Menu/Menu.jsx';
 import UserMenu from '../../Components/UserMenu/UserMenu.jsx';
-import Search from '../../Components/Search/Search.jsx';
+import SearchBar from '../../Components/SearchBar/SearchBar.jsx';
 import Add from '../../Components/Add/Add.jsx';
 
-function App() {
+function Home() {
   return (
-    <div className="AppHome">
-      <div className="AppBar">
+    <div className="Home">
+      <div className="Bar">
         <Menu />
         <UserMenu />
       </div>
-      <div className="App">
-        <Search />
+      <div className="HomeBody">
+        <SearchBar />
         <Add />
       </div>
     </div>
   );
 }
 
-export default App;
+export default Home;

@@ -1,4 +1,4 @@
-.AppHome {
+.Home {
   background-image: url('../../Assets/backgroundhome.png');
   display: flex;
   justify-content: space-between;
@@ -9,14 +9,14 @@
   background-position: center;
 }
 
-.AppBar {
+.Bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 }
 
-.App {
+.HomeBody {
   display: flex;
   align-items: center;
   width: 1000px;
