@@ -2,12 +2,10 @@ import { Injectable } from '@nestjs/common'
 import { UserDto } from './user.dto'
 import { v4 as uuid } from 'uuid'
 import * as bcrypt from 'bcrypt'
-import { createOrUpdateUsers, deleteUserById, deleteUserByEmail, getUserById, getUserByEmail, readAllUsers } from '../infra/db'
+import { createOrUpdateUsers, getUserByEmail, readAllUsers } from '../infra/repositories/usersRepository'
 
 @Injectable()
 export class UsersService {
-  private readonly users: UserDto[] = []
-
   async create(newUser: UserDto) {
     newUser.id = uuid()
     newUser.password = bcrypt.hashSync(newUser.password, 10)
@@ -16,21 +14,25 @@ export class UsersService {
 
     if (isEmailAlreadyInUse === null) {
       return {
-        success: 'false',
+        success: false,
         message: 'Something went wrong'
       }
     }
 
     if (isEmailAlreadyInUse) {
       return {
-        success: 'false',
+        success: false,
         message: 'Email Already In Use'
       }
     }
 
     const { success } = await createOrUpdateUsers(newUser)
 
-    return {success}
+    if (!success) {
+      return { success: false, message: 'Failed to create user' };
+    }
+  
+    return { success: true, message: 'User created successfully' };
   }
 
   async findAllUsers() {
@@ -42,9 +44,16 @@ export class UsersService {
     return null
   }
 
-  findByEmail(email: string): UserDto | null {
-    return this.users.find(user => user.email === email)
-  }
+  async findByEmail(userEmail: string): Promise<UserDto | null> {
+    const { success, data } = await getUserByEmail(userEmail);
+  
+    if (!success || !data) {
+      return null;
+    }
+  
+    const { id, name, email, password } = data
+    return { id, name, email, password }
+  }  
 }
 
 async function emailValidation(email: string) {

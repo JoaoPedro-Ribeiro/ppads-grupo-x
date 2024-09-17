@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Jonata\",\r\n    \"email\": \"jonata@teste.com\",\r\n    \"password\": \"teste123\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Gabriel\",\r\n    \"email\": \"gabriel@teste.com\",\r\n    \"password\": \"teste123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -55,20 +55,46 @@
 			]
 		},
 		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"gabriel@teste.com\",\r\n    \"password\": \"teste123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-backend}}/auth/login",
+							"host": [
+								"{{url-backend}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "get /",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://ppads-grupo-x.onrender.com/",
-					"protocol": "https",
+					"raw": "{{url-backend}}",
 					"host": [
-						"ppads-grupo-x",
-						"onrender",
-						"com"
-					],
-					"path": [
-						""
+						"{{url-backend}}"
 					]
 				}
 			},
