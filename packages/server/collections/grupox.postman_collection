@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Gabriel\",\r\n    \"email\": \"gabriel@teste.com\",\r\n    \"password\": \"teste123\"\r\n}",
+							"raw": "{\r\n    \"name\": \"joao\",\r\n    \"email\": \"joao@teste.com\",\r\n    \"password\": \"teste123\",\r\n    \"isAdmin\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -64,7 +64,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"gabriel@teste.com\",\r\n    \"password\": \"teste123\"\r\n}",
+							"raw": "{\r\n    \"email\": \"joao@teste.com\",\r\n    \"password\": \"teste123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
