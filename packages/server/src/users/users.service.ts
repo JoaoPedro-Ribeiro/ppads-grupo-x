@@ -51,8 +51,8 @@ export class UsersService {
       return null;
     }
   
-    const { id, name, email, password } = data
-    return { id, name, email, password }
+    const { id, name, email, password, isAdmin } = data
+    return { id, name, email, password, isAdmin }
   }  
 }
 
