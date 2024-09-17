@@ -20,7 +20,7 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const url = 'https://ppads-grupo-x.onrender.com/login';
+      const url = 'https://ppads-grupo-x.onrender.com/auth/login';
       const loginData = {
         email: username,
         password: password,

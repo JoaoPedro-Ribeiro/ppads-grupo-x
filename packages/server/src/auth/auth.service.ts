@@ -8,6 +8,7 @@ import { ConfigService } from "@nestjs/config";
 @Injectable()
 export class AuthService {
     private jwtExpirationTimeInSeconds: number;
+    private jwtExpirationExtendedTimeInSeconds: number;
 
     constructor(
         private readonly usersService: UsersService,
@@ -15,9 +16,10 @@ export class AuthService {
         private readonly configService: ConfigService
     ) {
         this.jwtExpirationTimeInSeconds = +this.configService.get<number>('JWT_EXPIRATION_TIME');
+        this.jwtExpirationExtendedTimeInSeconds = +this.configService.get<number>('JWT_EXPIRATION_TIME_EXTENDED');
     }
 
-    async signIn(email: string, password: string): Promise<AuthResponseDto> {
+    async signIn(email: string, password: string, stayLoggedIn: boolean): Promise<AuthResponseDto> {
         const foundUser = await this.usersService.findByEmail(email)
         
         if (!foundUser || !bcryptCompareSync(password, foundUser.password)) {
@@ -25,8 +27,13 @@ export class AuthService {
         }
 
         const payload = { sub: foundUser.id, email : foundUser.email, name: foundUser.name, isAdmin: foundUser.isAdmin};
-        const token = this.jwtService.sign(payload);
 
-        return { token, expiresIn: this.jwtExpirationTimeInSeconds };
+        const expiresIn = stayLoggedIn 
+            ? this.jwtExpirationExtendedTimeInSeconds
+            : this.jwtExpirationTimeInSeconds;
+
+        const token = this.jwtService.sign(payload, { expiresIn });
+
+        return { token, expiresIn };
     }
 }
