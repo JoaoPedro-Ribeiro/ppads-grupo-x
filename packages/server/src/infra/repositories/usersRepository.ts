@@ -1,4 +1,4 @@
-import { db } from "./db.config"
+import { db } from "../db.config"
 
 const table = 'users'
 
