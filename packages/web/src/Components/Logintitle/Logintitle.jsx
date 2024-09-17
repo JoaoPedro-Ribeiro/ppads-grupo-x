@@ -1,7 +1,7 @@
 import React from 'react'
 import './Logintitle.css'
 
-const Logintitle = () => {
+function Logintitle () {
   return (
     <div className='Login'>
       <h1>OLÁ,<br></br>BIBLIOTECÁRIO(A)!</h1>
