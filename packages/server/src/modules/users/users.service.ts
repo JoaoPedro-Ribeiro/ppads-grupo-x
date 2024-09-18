@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common'
-import { UserDto } from './user.dto'
+import { UserDto } from './dto/user.dto'
 import { v4 as uuid } from 'uuid'
 import * as bcrypt from 'bcrypt'
-import { createOrUpdateUsers, getUserByEmail, readAllUsers } from '../infra/repositories/usersRepository'
+import { UsersRepository } from './usersRepository'
 
 @Injectable()
 export class UsersService {
+  constructor(private readonly usersRepository: UsersRepository) {}
+
   async create(newUser: UserDto) {
     newUser.id = uuid()
     newUser.password = bcrypt.hashSync(newUser.password, 10)
     
-    const isEmailAlreadyInUse = await emailValidation(newUser.email)
+    const isEmailAlreadyInUse = await this.emailValidation(newUser.email)
 
     if (isEmailAlreadyInUse === null) {
       return {
@@ -26,7 +28,7 @@ export class UsersService {
       }
     }
 
-    const { success } = await createOrUpdateUsers(newUser)
+    const { success } = await this.usersRepository.createUsers(newUser)
 
     if (!success) {
       return { success: false, message: 'Failed to create user' };
@@ -36,7 +38,7 @@ export class UsersService {
   }
 
   async findAllUsers() {
-    const {success, data} = await readAllUsers()
+    const {success, data} = await this.usersRepository.readAllUsers()
 
     if (success){
       return {success, data}
@@ -45,7 +47,7 @@ export class UsersService {
   }
 
   async findByEmail(userEmail: string): Promise<UserDto | null> {
-    const { success, data } = await getUserByEmail(userEmail);
+    const { success, data } = await this.usersRepository.getUserByEmail(userEmail);
   
     if (!success || !data) {
       return null;
@@ -54,14 +56,14 @@ export class UsersService {
     const { id, name, email, password, isAdmin } = data
     return { id, name, email, password, isAdmin }
   }  
-}
 
-async function emailValidation(email: string) {
-  const { success, data } = await getUserByEmail(email)
-
-  if (success) {
-    return data?.email === email
+  async emailValidation(email: string) {
+    const { success, data } = await this.usersRepository.getUserByEmail(email)
+  
+    if (success) {
+      return data?.email === email
+    }
+  
+    return null
   }
-
-  return null
 }
