@@ -31,10 +31,10 @@ export class UsersService {
     const { success } = await this.usersRepository.createUsers(newUser)
 
     if (!success) {
-      return { success: false, message: 'Failed to create user' };
+      return { success: false, message: 'Failed to create user' }
     }
   
-    return { success: true, message: 'User created successfully' };
+    return { success: true, message: 'User created successfully' }
   }
 
   async findAllUsers() {
@@ -47,10 +47,10 @@ export class UsersService {
   }
 
   async findByEmail(userEmail: string): Promise<UserDto | null> {
-    const { success, data } = await this.usersRepository.getUserByEmail(userEmail);
+    const { success, data } = await this.usersRepository.getUserByEmail(userEmail)
   
     if (!success || !data) {
-      return null;
+      return null
     }
   
     const { id, name, email, password, isAdmin } = data

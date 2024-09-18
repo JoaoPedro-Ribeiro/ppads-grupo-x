@@ -1,6 +1,6 @@
-import { Module, Global } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as AWS from 'aws-sdk';
+import { Module, Global } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import * as AWS from 'aws-sdk'
 
 @Global()
 @Module({
@@ -13,8 +13,8 @@ import * as AWS from 'aws-sdk';
           region: configService.get<string>('AWS_REGION'),
           accessKeyId: configService.get<string>('AWS_ACCESS_KEY_ID'),
           secretAccessKey: configService.get<string>('AWS_SECRET_ACCESS_KEY'),
-        });
-        return new AWS.DynamoDB.DocumentClient();
+        })
+        return new AWS.DynamoDB.DocumentClient()
       },
       inject: [ConfigService],
     },
