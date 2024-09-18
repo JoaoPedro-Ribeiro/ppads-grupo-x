@@ -37,6 +37,22 @@ export class UsersService {
     return { success: true, message: 'User created successfully' }
   }
 
+  async deleteUser(email: string) {
+    const emailExists = await this.emailValidation(email)
+  
+    if (!emailExists) {
+      return { success: false, message: 'User does not exist!' }
+    }
+  
+    const { success: deletionSuccess } = await this.usersRepository.deleteUserByEmail(email)
+  
+    if (!deletionSuccess) {
+      return { success: false, message: 'Failed to delete user' }
+    }
+  
+    return { success: true, message: 'User deleted successfully' }
+  }  
+
   async findAllUsers() {
     const {success, data} = await this.usersRepository.readAllUsers()
 

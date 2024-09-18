@@ -102,8 +102,9 @@ export class UsersRepository {
       TableName: this.table,
       Key: {
         id: id,
+        email: email
       },
-    }
+  }
 
     try {
       await this.db.delete(params).promise()

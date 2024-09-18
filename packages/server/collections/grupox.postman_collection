@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8a63bb9a-034c-4345-bd06-19af3be54f3c",
+		"_postman_id": "aede3825-af5b-4ee4-b135-dae004d44e54",
 		"name": "PPADS-GRUPOX",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "37888468"
@@ -10,7 +10,75 @@
 			"name": "Users",
 			"item": [
 				{
+					"name": "Get All Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Success field is true\", function () {\r",
+									"    pm.expect(pm.response.json().success).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-backend}}/users/getAllUsers",
+							"host": [
+								"{{url-backend}}"
+							],
+							"path": [
+								"users",
+								"getAllUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 201\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has the required fields - success and message\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('success');\r",
+									"    pm.expect(responseData).to.have.property('message');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Success field is true\", function () {\r",
+									"    pm.expect(pm.response.json().success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Message field is a string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.message).to.be.a('string');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -24,29 +92,72 @@
 							}
 						},
 						"url": {
-							"raw": "{{url-backend}}/users",
+							"raw": "{{url-backend}}/users/createUser",
 							"host": [
 								"{{url-backend}}"
 							],
 							"path": [
-								"users"
+								"users",
+								"createUser"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get All Users",
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 201\", function () { //mudar dps o código\r",
+									"    pm.expect(pm.response.code).to.equal(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has the required fields - success and message\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('success');\r",
+									"    pm.expect(responseData).to.have.property('message');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Success field is true\", function () {\r",
+									"    pm.expect(pm.response.json().success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Message field is a string\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  pm.expect(responseData.message).to.be.a('string');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"teste@teste.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{url-backend}}/users",
+							"raw": "{{url-backend}}/users/deleteUser",
 							"host": [
 								"{{url-backend}}"
 							],
 							"path": [
-								"users"
+								"users",
+								"deleteUser"
 							]
 						}
 					},
@@ -59,6 +170,42 @@
 			"item": [
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let token = response.token;\r",
+									"pm.environment.set(\"token\", token);\r",
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has the required fields - token and expiresIn\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.token).to.exist;\r",
+									"    pm.expect(responseData.expiresIn).to.exist;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.token).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Token should be a non-empty string\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"expiresIn is a non-negative integer\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.expiresIn).to.be.a('number').and.to.be.at.least(0, \"expiresIn should be a non-negative integer\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -85,20 +232,6 @@
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "get /",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url-backend}}",
-					"host": [
-						"{{url-backend}}"
-					]
-				}
-			},
-			"response": []
 		}
 	]
 }
