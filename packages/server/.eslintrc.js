@@ -1,4 +1,4 @@
-const { EndOfLineState } = require("typescript");
+const { EndOfLineState } = require("typescript")
 
 module.exports = {
   parser: '@typescript-eslint/parser',
