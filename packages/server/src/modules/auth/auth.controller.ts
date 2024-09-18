@@ -11,8 +11,9 @@ export class AuthController {
     @Post('login')
     async signIn(
         @Body('email') email: string,
-        @Body('password') password: string
+        @Body('password') password: string,
+        @Body('stayLoggedIn') stayLoggedIn: boolean
     ): Promise<AuthResponseDto> {
-        return await this.authService.signIn(email, password)
+        return await this.authService.signIn(email, password, stayLoggedIn)
     }
 }

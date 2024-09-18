@@ -17,7 +17,7 @@ export class AuthService {
         this.jwtExpirationTimeInSeconds = +this.configService.get<number>('JWT_EXPIRATION_TIME')
     }
 
-    async signIn(email: string, password: string): Promise<AuthResponseDto> {
+    async signIn(email: string, password: string, stayLoggedIn: boolean): Promise<AuthResponseDto> {
         const foundUser = await this.usersService.findByEmail(email)
         
         if (!foundUser || !bcryptCompareSync(password, foundUser.password)) {
