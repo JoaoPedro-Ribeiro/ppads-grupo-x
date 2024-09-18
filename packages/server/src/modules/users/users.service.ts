@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { UserDto } from './dto/user.dto'
 import { v4 as uuid } from 'uuid'
 import * as bcrypt from 'bcrypt'
-import { UsersRepository } from './usersRepository'
+import { UsersRepository } from '../dynamodb/repositories/usersRepository'
 
 @Injectable()
 export class UsersService {
@@ -45,17 +45,6 @@ export class UsersService {
     }
     return null
   }
-
-  async findByEmail(userEmail: string): Promise<UserDto | null> {
-    const { success, data } = await this.usersRepository.getUserByEmail(userEmail)
-  
-    if (!success || !data) {
-      return null
-    }
-  
-    const { id, name, email, password, isAdmin } = data
-    return { id, name, email, password, isAdmin }
-  }  
 
   async emailValidation(email: string) {
     const { success, data } = await this.usersRepository.getUserByEmail(email)
