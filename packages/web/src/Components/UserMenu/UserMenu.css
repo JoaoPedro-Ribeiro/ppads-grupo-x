@@ -1,7 +1,7 @@
 .user-menu {
     background-color: var(--cinza-escuro) !important;
     width: 400px !important;
-    height: 180px !important;
+    height: 190px !important;
     font-size: 10px; 
     padding: 20px 0px;
     margin: 20px;
@@ -47,7 +47,7 @@
     box-shadow: none;
     cursor: pointer;
     font-size: 18px;
-    margin-top: 10px;
+    margin-top: 0px;
 }
     
 .modal-box {
@@ -82,7 +82,7 @@
     position: relative;
     width: 100%;
     height: 50px;
-    margin: 20px auto;
+    margin: 10px auto;
 }
 
 .input-field input {
@@ -125,10 +125,59 @@
     border: none;
     border-radius: 30px;
     cursor: pointer;
-    font-size: 20px
+    font-size: 20px;
+    margin-top: -20px;
 }
 
 .containerUser button:hover {
     background-color: var(--cinza-medio);
     color: var(--cinza-escuro);
 }
+
+.modalUserPassword {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 50px;
+}
+
+.formUserPassword {
+    margin-top: 50px;
+}
+
+.formUserPassword button {
+    margin-top: 90px;
+}
+
+.users-list {
+    background-color: var(--cinza-escuro);
+    height: 230px;
+    width: 400px;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.users-list::-webkit-scrollbar {
+    width: 0px;
+}
+
+.user-card {
+    margin-left: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-height: 100%;
+}
+
+.hidden {
+    display: none;
+    pointer-events: none;
+    opacity: 0;
+}
+
