@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Logintitle from '../../Components/Logintitle/Logintitle';
-import './Login.css'
 import api from '../../services/axios';
+import { apiBaseUrl } from '../../../externalUrls';
+import './Login.css'
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -20,7 +21,7 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const url = 'https://ppads-grupo-x.onrender.com/login';
+      const url = `${apiBaseUrl}/auth/login`;
       const loginData = {
         email: username,
         password: password,
@@ -64,7 +65,6 @@ const Login = () => {
               <input type="checkbox" onChange={handleCheckboxChange} />
               MANTER CONECTADO
             </label>
-            <a href="/redefine">ESQUECEU A SENHA?</a>
           </div>
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
           
