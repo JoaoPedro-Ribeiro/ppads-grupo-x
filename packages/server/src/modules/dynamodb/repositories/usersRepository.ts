@@ -66,6 +66,23 @@ export class UsersRepository {
     }
   }
 
+  async getUserById(value: string, key = 'id'): Promise<{ success: boolean, data: any }> {
+    const params = {
+      TableName: this.table,
+      Key: {
+        [key]: String(value),
+      },
+    }
+
+    try {
+      const { Item = {} } = await this.db.get(params).promise()
+      return { success: true, data: Item }
+    } catch (error) {
+      console.debug('UsersRepository :: getUserById :: DynamoError -> ', error)
+      return { success: false, data: null }
+    }
+  }
+
   async getIdByEmail(email: string): Promise<{ success: boolean, id: string | null }> {
     const params = {
       TableName: this.table,
@@ -115,35 +132,20 @@ export class UsersRepository {
     }
   }
 
-  async updatePassword(input: { email: string, newPassword: string }): Promise<{ success: boolean, message?: string }> {
-    const { success, id } = await this.getIdByEmail(input.email);
-
-    if (!success || !id) {
-        return { success: false, message: 'User not found' };
-    }
-
+  async deleteUserById(value: string, key = 'id'): Promise<{ success: boolean }> {
     const params = {
-        TableName: this.table,
-        Key: {
-            id: id,
-            email: input.email,
-        },
-        UpdateExpression: 'set #password = :newPassword',
-        ExpressionAttributeNames: {
-            '#password': 'password'
-        },
-        ExpressionAttributeValues: {
-            ':newPassword': input.newPassword
-        },
-        ReturnValues: 'UPDATED_NEW'
+      TableName: this.table,
+      Key: {
+        [key]: String(value),
+      },
     }
 
     try {
-        await this.db.update(params).promise();
-        return { success: true, message: 'Password updated successfully' };
+      await this.db.delete(params).promise()
+      return { success: true }
     } catch (error) {
-        console.debug('UsersRepository :: updatePassword :: DynamoError -> ', error);
-        return { success: false, message: 'Error updating password' };
+      console.debug('UsersRepository :: deleteUserById :: DynamoError -> ', error)
+      return { success: false }
     }
   }
 }
