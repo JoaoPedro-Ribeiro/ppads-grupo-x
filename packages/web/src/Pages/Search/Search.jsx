@@ -1,9 +1,17 @@
 import './Search.css';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Menu from '../../Components/Menu/Menu.jsx';
 import UserMenu from '../../Components/UserMenu/UserMenu.jsx';
 import SearchBar from '../../Components/SearchBar/SearchBar.jsx';
 import Add from '../../Components/Add/Add.jsx';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ImageIcon from '@mui/icons-material/Image';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 
 function Search() {
     const [books, setBooks] = useState([]);
@@ -32,6 +40,33 @@ function Search() {
     const handleCloseModal = () => {
         setModalOpen(false);
         setSelectedBook(null);
+    };
+
+    const handleUploadClick = () => {
+        document.getElementById('coverImage').click();
+    };
+
+    const handleQuantityChange = (amount) => {
+        setSelectedBook((prevBook) => ({
+            ...prevBook,
+            quantity: prevBook.quantity + amount,
+        }));
+    };
+
+    const handleQuantityInputChange = (event) => {
+        const value = parseInt(event.target.value, 10);
+        setSelectedBook((prevBook) => ({
+            ...prevBook,
+            quantity: isNaN(value) ? 0 : value,
+        }));
+    };
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            // Handle the image file here
+            console.log("Selected file:", file);
+        }
     };
 
     return (
@@ -71,7 +106,7 @@ function Search() {
                         <div className='bodyUser'>
                             <div className="input-container">
                                 <EditIcon sx={{ color: 'var(--branco)' }} />
-                                <input type="text" value={selectedBook.name} autocomplete="off" placeholder="ADICIONE O NOME DO LIVRO" />
+                                <input type="text" value={selectedBook.name} autoComplete="off" placeholder="ADICIONE O NOME DO LIVRO" />
                             </div>
 
                             <div className="input-container">

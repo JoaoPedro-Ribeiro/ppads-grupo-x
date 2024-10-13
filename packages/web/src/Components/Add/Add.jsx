@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Modal, Box, Button, TextField, MenuItem, IconButton } from '@mui/material';
+import { useState } from 'react';
+import { Modal, Box, Button, IconButton } from '@mui/material';
 import ImageIcon from '@mui/icons-material/Image';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
@@ -8,9 +8,7 @@ import './Add.css';
 
 function Add() {
     const [addBookOpen, setAddBookOpen] = useState(false);
-    const [coverImage, setCoverImage] = useState(null);
     const [quantity, setQuantity] = useState(1);
-    const [category, setCategory] = useState('');
 
     const handleAddBook = () => {
         setAddBookOpen(true);
@@ -20,15 +18,13 @@ function Add() {
         setAddBookOpen(false);
     };
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        setCoverImage(file);
+    const handleImageChange = () => {
+        // handle image change logic here
     };
 
     const handleUploadClick = () => {
         document.getElementById('coverImage').click();
     };
-
     const handleQuantityChange = (amount) => {
         setQuantity(prev => Math.max(1, prev + amount));
     };

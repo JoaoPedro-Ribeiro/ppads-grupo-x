@@ -108,3 +108,36 @@ main {
     justify-content: center;
     align-items: center;
 }
+
+/* Show/Hide Password Toggle (Eye Icon) */
+.input-field .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-25%);
+    cursor: pointer;
+    color: var(--cinza-escuro);
+}
+
+.input-field .toggle-password:hover {
+    color: var(--cinza-medio);
+}
+
+
+
+.toggle-password {
+    cursor: pointer; /* Para mudar o cursor ao passar o mouse */
+    position: relative; /* Permite manipular a posição com 'top', 'bottom', 'left', 'right' */
+    font-size: 20px; /* Tamanho do ícone */
+    margin-left: 10px; /* Espaço à esquerda do ícone */
+  
+    /* Ajustes de posição */
+    top: 150px; /* Mova para baixo ou cima, ajustando o valor */
+  }
+  
+  .input-field {
+    display: flex; /* Isso alinha o ícone e o input no mesmo nível */
+    align-items: center; /* Centraliza o ícone verticalmente */
+  }
+  
+  

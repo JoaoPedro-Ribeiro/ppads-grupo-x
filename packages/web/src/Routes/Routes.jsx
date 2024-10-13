@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import PropTypes from 'prop-types';
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom"
 import Login from "../Pages/Login/Login.jsx"
 import App from "../Pages/Home/Home.jsx";
@@ -11,6 +12,9 @@ const RoutesApp = () => {
 
     const ProtectedRoute = ({ element }) => {
         return isAuthenticated() ? element : <Navigate to="/login" />;;
+    };
+    ProtectedRoute.propTypes = {
+        element: PropTypes.element.isRequired,
     };
 
     return (

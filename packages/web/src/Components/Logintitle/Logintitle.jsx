@@ -1,4 +1,3 @@
-import React from 'react'
 import './Logintitle.css'
 
 function Logintitle () {

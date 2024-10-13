@@ -25,7 +25,7 @@ export class LivrosService {
     return livro;
   }
 
-  update(id: number, updateLivroDto: Partial<UpdateLivroDto>) {
+  update(id: number, updateLivroDto: UpdateLivroDto) {
     const livroIndex = this.livros.findIndex(livro => livro.id === id);
     if (livroIndex === -1) {
       throw new NotFoundException(`Livro com ID ${id} não encontrado`);
