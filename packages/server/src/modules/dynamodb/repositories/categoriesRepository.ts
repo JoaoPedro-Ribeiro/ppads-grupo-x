@@ -3,7 +3,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 @Injectable()
 export class CategoriesRepository {
-  private readonly db: DocumentClient;
+  private readonly db: DocumentClient
   private readonly table = 'categories'
 
   constructor(
@@ -18,7 +18,7 @@ export class CategoriesRepository {
     };
 
     try {
-      const { Items = [] } = await this.db.scan(params).promise();
+      const { Items = [] } = await this.db.scan(params).promise()
       return { success: true, data: Items.map(item => ({
         category_id: item.category_id,
         category: item.category
