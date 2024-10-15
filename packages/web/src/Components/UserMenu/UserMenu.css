@@ -164,8 +164,22 @@
 }
 
 .users-list::-webkit-scrollbar {
-    width: 0px;
+    width: 5px;
 }
+
+.users-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.users-list::-webkit-scrollbar-thumb {
+    background-color: var(--cinza-claro);
+    border-radius: 4px;
+}
+
+.users-list::-webkit-scrollbar-thumb:hover {
+    background-color: var(--cinza-medio);
+}
+
 
 .user-card {
     margin-left: 60px;
