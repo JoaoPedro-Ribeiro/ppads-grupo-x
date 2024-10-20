@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
 import { compareSync as bcryptCompareSync } from "bcrypt"
-import { AuthResponseDto } from "./dto/auth.dto"
 import { ConfigService } from "@nestjs/config"
 import { UpdatePasswordDto } from "./dto/updatePassword.dto"
 import { UsersRepository } from "../dynamodb/repositories/usersRepository"
@@ -20,7 +19,7 @@ export class AuthService {
         this.jwtExpirationTimeInSeconds = +this.configService.get<number>('JWT_EXPIRATION_TIME')
     }
 
-    async signIn(input: LoginDto): Promise<AuthResponseDto> {
+    async signIn(input: LoginDto) {
         const { success: userFound, data} = await this.usersRepository.getUserByEmail(input.email)
         
         if (!userFound || !bcryptCompareSync(input.password, data.password)) {

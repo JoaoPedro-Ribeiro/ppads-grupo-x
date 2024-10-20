@@ -8,8 +8,12 @@ import { UsersRepository } from '../dynamodb/repositories/usersRepository'
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async create(newUser: UserDto) {
-    newUser.id = uuid()
+  async create(input: UserDto) {
+    const newUser = {
+      ...input,
+      id: uuid()
+    }
+
     newUser.password = bcrypt.hashSync(newUser.password, 10)
     
     const isEmailAlreadyInUse = await this.emailValidation(newUser.email)
