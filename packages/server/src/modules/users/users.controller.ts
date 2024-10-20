@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common'
 import { UsersService } from './users.service'
-import { InputDeleteUserDto} from './dto/inputDeleteUser.dto'
+import { InputDeleteUserDto } from './dto/inputDeleteUser.dto'
 import { InputCreateUserDto } from './dto/inputCreateUser.dto'
 
 @Controller('users')

@@ -1,5 +1,3 @@
-const { EndOfLineState } = require("typescript")
-
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -23,7 +21,9 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    semi: ['error', 'never'],
-    EndOfLineState: 'auto'
+    'semi': ['error', 'never'],
+    'prettier/prettier': ['error', { semi: false }],
+    'no-trailing-spaces': 'error',
+    'eol-last': ['error', 'always'],
   },
 }

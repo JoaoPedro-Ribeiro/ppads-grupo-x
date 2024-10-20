@@ -11,6 +11,7 @@ import { CategoriesModule } from './modules/books/categories/categories.module'
     UsersModule,
     AuthModule,
     CategoriesModule,
-    DynamodbModule]
+    DynamodbModule
+  ]
 })
 export class AppModule {}
