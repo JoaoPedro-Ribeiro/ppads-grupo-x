@@ -33,6 +33,9 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      'semi': ['error', 'never'],
+      'no-trailing-spaces': 'error',
+      'eol-last': ['error', 'always'],
     },
   },
 ]

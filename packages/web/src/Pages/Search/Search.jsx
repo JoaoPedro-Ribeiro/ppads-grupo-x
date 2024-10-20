@@ -1,38 +1,41 @@
-import './Search.css';
-import React, { useState, useEffect } from 'react';
-import Menu from '../../Components/Menu/Menu.jsx';
-import UserMenu from '../../Components/UserMenu/UserMenu.jsx';
-import SearchBar from '../../Components/SearchBar/SearchBar.jsx';
-import Add from '../../Components/Add/Add.jsx';
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable no-unused-vars */
+
+import './Search.css'
+import React, { useState, useEffect } from 'react'
+import Menu from '../../Components/Menu/Menu.jsx'
+import UserMenu from '../../Components/UserMenu/UserMenu.jsx'
+import SearchBar from '../../Components/SearchBar/SearchBar.jsx'
+import Add from '../../Components/Add/Add.jsx'
 
 function Search() {
-    const [books, setBooks] = useState([]);
-    const [selectedBook, setSelectedBook] = useState(null);
-    const [modalOpen, setModalOpen] = useState(false);
+    const [books, setBooks] = useState([])
+    const [selectedBook, setSelectedBook] = useState(null)
+    const [modalOpen, setModalOpen] = useState(false)
 
     const fetchBooks = async () => {
         try {
-            const response = await fetch('search/books');
-            const data = await response.json();
-            setBooks(data);
+            const response = await fetch('search/books')
+            const data = await response.json()
+            setBooks(data)
         } catch (error) {
-            console.error("Erro ao buscar livros:", error);
+            console.error("Erro ao buscar livros:", error)
         }
-    };
+    }
 
     useEffect(() => {
-        fetchBooks();
-    }, []);
+        fetchBooks()
+    }, [])
 
     const handleBookClick = (book) => {
-        setSelectedBook(book);
-        setModalOpen(true);
-    };
+        setSelectedBook(book)
+        setModalOpen(true)
+    }
 
     const handleCloseModal = () => {
-        setModalOpen(false);
-        setSelectedBook(null);
-    };
+        setModalOpen(false)
+        setSelectedBook(null)
+    }
 
     return (
     <div className="Search">
@@ -61,8 +64,8 @@ function Search() {
                         <div className='headerUser'>
                             <div className="upload-container" onClick={handleUploadClick}>
                                 <ImageIcon sx={{ fontSize: 40, color: 'var(--branco)' }} />
-                                <p>ADICIONE</p> 
-                                <p>UMA</p> 
+                                <p>ADICIONE</p>
+                                <p>UMA</p>
                                 <p>IMAGEM</p>
                                 <input type="file" id="coverImage" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
                             </div>
@@ -71,7 +74,7 @@ function Search() {
                         <div className='bodyUser'>
                             <div className="input-container">
                                 <EditIcon sx={{ color: 'var(--branco)' }} />
-                                <input type="text" value={selectedBook.name} autocomplete="off" placeholder="ADICIONE O NOME DO LIVRO" />
+                                <input type="text" value={selectedBook.name} autoComplete="off" placeholder="ADICIONE O NOME DO LIVRO" />
                             </div>
 
                             <div className="input-container">
@@ -99,7 +102,7 @@ function Search() {
             </Modal>
         )}
     </div>
-    );
+    )
 }
 
-export default Search;
+export default Search

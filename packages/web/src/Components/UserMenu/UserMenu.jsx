@@ -1,138 +1,140 @@
-import React, { useState, useEffect } from 'react';
-import { IconButton, Modal, Box, Button, Drawer } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
-import api from '../../services/axios';
-import { jwtDecode } from 'jwt-decode';
-import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from 'react-router-dom';
-import { apiBaseUrl } from '../../../externalUrls';
-import './UserMenu.css';
+/* eslint-disable no-unused-vars */
+
+import React, { useState, useEffect } from 'react'
+import { IconButton, Modal, Box, Button, Drawer } from '@mui/material'
+import PersonIcon from '@mui/icons-material/Person'
+import api from '../../services/axios'
+import { jwtDecode } from 'jwt-decode'
+import CloseIcon from '@mui/icons-material/Close'
+import { useNavigate } from 'react-router-dom'
+import { apiBaseUrl } from '../../../externalUrls'
+import './UserMenu.css'
 
 function UserMenu() {
-    const [userMenuOpen, setUserMenuOpen] = useState(false);
-    const [manageUsersOpen, setManageUsersOpen] = useState(false);
-    const [managePasswordOpen, setManagePasswordOpen] = useState(false);
+    const [userMenuOpen, setUserMenuOpen] = useState(false)
+    const [manageUsersOpen, setManageUsersOpen] = useState(false)
+    const [managePasswordOpen, setManagePasswordOpen] = useState(false)
     const [username, setUsername] = useState("USUÁRIO")
-    const [isUserAdmin, setIsUserAdmin] = useState(false);
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [isAdmin, setisAdmin] = useState(false);
-    const [users, setUsers] = useState([]);
-    const navigate = useNavigate();
+    const [isUserAdmin, setIsUserAdmin] = useState(false)
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [newPassword, setNewPassword] = useState("")
+    const [isAdmin, setisAdmin] = useState(false)
+    const [users, setUsers] = useState([])
+    const navigate = useNavigate()
 
     useEffect(() => {
-        const jwtToken = localStorage.getItem('token');
+        const jwtToken = localStorage.getItem('token')
         if (jwtToken) {
-            const tokenPayload = jwtDecode(jwtToken);
-            setUsername(tokenPayload.name);
-            setIsUserAdmin(tokenPayload.isAdmin);
+            const tokenPayload = jwtDecode(jwtToken)
+            setUsername(tokenPayload.name)
+            setIsUserAdmin(tokenPayload.isAdmin)
         }
-    }, []);
+    }, [])
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await api.get(`${apiBaseUrl}/users/getAllUsers`, {});
-                setUsers(response.data.data);
+                const response = await api.get(`${apiBaseUrl}/users/getAllUsers`, {})
+                setUsers(response.data.data)
             } catch (error) {
-                console.error("Erro ao buscar usuários:", error);
+                console.error("Erro ao buscar usuários:", error)
             }
-        };
-        if (isUserAdmin) {
-            fetchUsers();
         }
-    }, [isUserAdmin]);
+        if (isUserAdmin) {
+            fetchUsers()
+        }
+    }, [isUserAdmin])
 
     const handleSubmitCreateUser = async (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
         try {
-            const url = `${apiBaseUrl}/users/createUser`;
+            const url = `${apiBaseUrl}/users/createUser`
 
             const userData = {
                 name: name,
                 email: email,
                 password: password,
                 isAdmin: isAdmin
-            };
+            }
 
-            const response = await api.post(url, userData);
+            const response = await api.post(url, userData)
 
-            console.log("Usuário criado:", response.data);
-            setEmail("");
-            setName("");
-            setPassword("");
-            setisAdmin(false);
-            setManageUsersOpen(false);
+            console.log("Usuário criado:", response.data)
+            setEmail("")
+            setName("")
+            setPassword("")
+            setisAdmin(false)
+            setManageUsersOpen(false)
         } catch (error) {
-            console.error("Erro ao criar usuário:", error);
+            console.error("Erro ao criar usuário:", error)
         }
-    };
+    }
 
     const handleSubmitUpdatePassword = async (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
         try {
-            const url = `${apiBaseUrl}/auth/updatePassword`;
+            const url = `${apiBaseUrl}/auth/updatePassword`
             const passwordData = {
                 email: email,
                 newPassword: newPassword
-            };
+            }
 
-            const response = await api.put(url, passwordData);
+            const response = await api.put(url, passwordData)
 
-            console.log("Senha redefinida:", response.data);
-            setManagePasswordOpen(false);
+            console.log("Senha redefinida:", response.data)
+            setManagePasswordOpen(false)
         } catch (error) {
-            console.error("Erro ao redefinir senha:", error);
+            console.error("Erro ao redefinir senha:", error)
         }
-    };
+    }
 
     const handleDeleteUser = async (emailToDelete) => {
         if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
             try {
-                const url = `${apiBaseUrl}/users/deleteUser`;
+                const url = `${apiBaseUrl}/users/deleteUser`
 
-                const response = await api.post(url, { email: emailToDelete });
+                const response = await api.post(url, { email: emailToDelete })
 
-                setUsers(users.filter(user => user.email !== emailToDelete));
-                console.log("Usuário excluído:", response.data);
+                setUsers(users.filter(user => user.email !== emailToDelete))
+                console.log("Usuário excluído:", response.data)
             } catch (error) {
-                console.error("Erro ao excluir usuário:", error);
+                console.error("Erro ao excluir usuário:", error)
             }
         }
-    };
+    }
 
     const handleUserMenu = () => {
-        setUserMenuOpen(!userMenuOpen);
-    };
+        setUserMenuOpen(!userMenuOpen)
+    }
 
     const handleManageUsers = () => {
-        setManageUsersOpen(true);
-    };
+        setManageUsersOpen(true)
+    }
 
     const handleCloseModal = () => {
-        setManageUsersOpen(false);
-    };
+        setManageUsersOpen(false)
+    }
 
     const handleManagePassword = () => {
-        setManagePasswordOpen(true);
-    };
+        setManagePasswordOpen(true)
+    }
 
     const handleClosePassword = () => {
-        setManagePasswordOpen(false);
-    };
+        setManagePasswordOpen(false)
+    }
 
     const handleCheckboxChange = (event) => {
-        setisAdmin(event.target.checked);
-    };
+        setisAdmin(event.target.checked)
+    }
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        navigate('/login');
-    };
+        localStorage.removeItem('token')
+        navigate('/login')
+    }
 
     return (
         <div className="userMenu">
@@ -181,7 +183,7 @@ function UserMenu() {
 
                                     <button>CONFIRMAR</button>
                                 </form>
-                            </div>  
+                            </div>
                         </div>
                         <h2>USUÁRIOS</h2>
                         <div className='users-list'>
@@ -214,14 +216,13 @@ function UserMenu() {
 
                                     <button >REDEFINIR</button>
                                 </form>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </Box>
             </Modal>
         </div>
-    );
+    )
 }
-  
-export default UserMenu;
-  
+
+export default UserMenu

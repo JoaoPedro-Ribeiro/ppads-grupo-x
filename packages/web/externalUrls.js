@@ -1,2 +1,2 @@
-const apiBaseUrl = 'https://ppads-grupo-x.onrender.com';
-export { apiBaseUrl };
+const apiBaseUrl = 'https://ppads-grupo-x.onrender.com'
+export { apiBaseUrl }

@@ -1,49 +1,49 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Logintitle from '../../Components/Logintitle/Logintitle';
-import api from '../../services/axios';
-import { apiBaseUrl } from '../../../externalUrls';
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Logintitle from '../../Components/Logintitle/Logintitle'
+import api from '../../services/axios'
+import { apiBaseUrl } from '../../../externalUrls'
 import './Login.css'
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [stayLoggedIn, setStayLoggedIn] = useState(false);
-  const navigate = useNavigate();
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
+  const [stayLoggedIn, setStayLoggedIn] = useState(false)
+  const navigate = useNavigate()
 
   const handleCheckboxChange = (event) => {
-    setStayLoggedIn(event.target.checked);
-    };
+    setStayLoggedIn(event.target.checked)
+    }
 
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     try {
-      const url = `${apiBaseUrl}/auth/login`;
+      const url = `${apiBaseUrl}/auth/login`
       const loginData = {
         email: username,
         password: password,
         stayLoggedIn: stayLoggedIn
-      };
+      }
 
-      const response = await api.post(url, loginData);
+      const response = await api.post(url, loginData)
 
       if (response.data.token) {
-        const jwtToken = response.data.token;
+        const jwtToken = response.data.token
 
-        localStorage.setItem('token', jwtToken);
+        localStorage.setItem('token', jwtToken)
 
-        navigate('/home');
+        navigate('/home')
       } else {
-        setErrorMessage("Login falhou. Verifique suas credenciais.");
+        setErrorMessage("Login falhou. Verifique suas credenciais.")
       }
     } catch (error) {
-      setErrorMessage("Erro ao fazer login. Tente novamente.");
-      console.log('Erro ao fazer login: ', error);
+      setErrorMessage("Erro ao fazer login. Tente novamente.")
+      console.log('Erro ao fazer login: ', error)
     }
-  };
+  }
 
   return (
   <main>
@@ -67,10 +67,10 @@ const Login = () => {
             </label>
           </div>
           {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-          
+
           <button>ENTRAR</button>
           </form>
-        </div>  
+        </div>
       </div>
     </div>
   </main>
