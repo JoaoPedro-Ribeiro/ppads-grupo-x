@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { InputDeleteUserDto } from './dto/inputDeleteUser.dto'
 import { InputCreateUserDto } from './dto/inputCreateUser.dto'
@@ -17,7 +17,7 @@ export class UsersController {
     return await this.userService.findAllUsers()
   }
 
-  @Post('deleteUser')
+  @Delete('deleteUser')
   async deleteUser(@Body() data: InputDeleteUserDto) {
     return await this.userService.deleteUser(data?.email)
   }

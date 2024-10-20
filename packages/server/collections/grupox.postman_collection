@@ -7,6 +7,127 @@
 	},
 	"item": [
 		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let token = response.token;\r",
+									"pm.environment.set(\"token\", token);\r",
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has the required fields - token and expiresIn\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.token).to.exist;\r",
+									"    pm.expect(responseData.expiresIn).to.exist;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.token).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Token should be a non-empty string\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"expiresIn is a non-negative integer\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.expiresIn).to.be.a('number').and.to.be.at.least(0, \"expiresIn should be a non-negative integer\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"teste@ppads.com\",\r\n    \"password\": \"teste\",\r\n    \"stayLoggedIn\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-backend}}/auth/login",
+							"host": [
+								"{{url-backend}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has the required fields - success and message\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.success).to.exist;\r",
+									"    pm.expect(responseData.message).to.exist;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Success field is true\", function () {\r",
+									"    pm.expect(pm.response.json().success).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"teste@ppads.com\",\r\n    \"newPassword\": \"teste123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-backend}}/auth/updatePassword",
+							"host": [
+								"{{url-backend}}"
+							],
+							"path": [
+								"auth",
+								"updatePassword"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Users",
 			"item": [
 				{
@@ -84,7 +205,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"joao\",\r\n    \"email\": \"joao@teste.com\",\r\n    \"password\": \"teste123\",\r\n    \"isAdmin\": true\r\n}",
+							"raw": "{\r\n    \"name\": \"teste\",\r\n    \"email\": \"teste@ppads.com\",\r\n    \"password\": \"teste123\",\r\n    \"isAdmin\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -139,11 +260,11 @@
 						}
 					],
 					"request": {
-						"method": "POST",
+						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"teste@teste.com\"\r\n}",
+							"raw": "{\r\n    \"email\": \"teste@ppads.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -166,39 +287,113 @@
 			]
 		},
 		{
-			"name": "Auth",
+			"name": "Books",
 			"item": [
 				{
-					"name": "Login",
+					"name": "Get All Books",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"let response = pm.response.json();\r",
-									"let token = response.token;\r",
-									"pm.environment.set(\"token\", token);\r",
-									"\r",
 									"pm.test(\"Response status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"  pm.expect(pm.response.code).to.equal(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Response has the required fields - token and expiresIn\", function () {\r",
+									"pm.test(\"Success field is true\", function () {\r",
+									"    pm.expect(pm.response.json().success).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-backend}}/books/getAllBooks",
+							"host": [
+								"{{url-backend}}"
+							],
+							"path": [
+								"books",
+								"getAllBooks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Books By Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Success field is true\", function () {\r",
+									"    pm.expect(pm.response.json().success).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-backend}}/books/getBooksByCategory?category=1",
+							"host": [
+								"{{url-backend}}"
+							],
+							"path": [
+								"books",
+								"getBooksByCategory"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Book",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 201\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has the required fields - success and message\", function () {\r",
 									"    const responseData = pm.response.json();\r",
 									"    \r",
 									"    pm.expect(responseData).to.be.an('object');\r",
-									"    pm.expect(responseData.token).to.exist;\r",
-									"    pm.expect(responseData.expiresIn).to.exist;\r",
+									"    pm.expect(responseData).to.have.property('success');\r",
+									"    pm.expect(responseData).to.have.property('message');\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Token is a non-empty string\", function () {\r",
-									"    const responseData = pm.response.json();\r",
-									"    pm.expect(responseData.token).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Token should be a non-empty string\");\r",
+									"pm.test(\"Success field is true\", function () {\r",
+									"    pm.expect(pm.response.json().success).to.be.true;\r",
 									"});\r",
 									"\r",
-									"pm.test(\"expiresIn is a non-negative integer\", function () {\r",
+									"pm.test(\"Message field is a string\", function () {\r",
 									"    const responseData = pm.response.json();\r",
-									"    pm.expect(responseData.expiresIn).to.be.a('number').and.to.be.at.least(0, \"expiresIn should be a non-negative integer\");\r",
+									"    \r",
+									"    pm.expect(responseData.message).to.be.a('string');\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -211,7 +406,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"joao@teste.com\",\r\n    \"password\": \"teste123\"\r\n}",
+							"raw": "{\r\n    \"name\": \"teste\",\r\n    \"description\": \"Um livro teste\",\r\n    \"category\": 1,\r\n    \"amount\": 10,\r\n    \"path\": \"um/exemplo/de/path\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -219,20 +414,86 @@
 							}
 						},
 						"url": {
-							"raw": "{{url-backend}}/auth/login",
+							"raw": "{{url-backend}}/books/createBook",
 							"host": [
 								"{{url-backend}}"
 							],
 							"path": [
-								"auth",
-								"login"
+								"books",
+								"createBook"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Password Redefine",
+					"name": "Delete Book By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 201\", function () { //mudar dps o código\r",
+									"    pm.expect(pm.response.code).to.equal(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has the required fields - success and message\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('success');\r",
+									"    pm.expect(responseData).to.have.property('message');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Success field is true\", function () {\r",
+									"    pm.expect(pm.response.json().success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Message field is a string\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  pm.expect(responseData.message).to.be.a('string');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"teste@ppads.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-backend}}/books/deleteBook/?id=cb1849f8-4a40-41ed-a718-2b5cd5c9d880",
+							"host": [
+								"{{url-backend}}"
+							],
+							"path": [
+								"books",
+								"deleteBook",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "cb1849f8-4a40-41ed-a718-2b5cd5c9d880"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Book",
 					"event": [
 						{
 							"listen": "test",
@@ -264,7 +525,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"joao@teste.com\",\r\n    \"newPassword\": \"teste123\"\r\n}",
+							"raw": "{\r\n    \"id\": \"cd2f9a31-a55c-4ae3-887e-e6254fa70dcb\",\r\n    \"name\": \"teste2\",\r\n    \"description\": \"Um livro teste\",\r\n    \"category\": 1,\r\n    \"amount\": 10,\r\n    \"path\": \"um/exemplo/de/path\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -272,13 +533,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url-backend}}/auth/updatePassword",
+							"raw": "{{url-backend}}/books/updateBook",
 							"host": [
 								"{{url-backend}}"
 							],
 							"path": [
-								"auth",
-								"updatePassword"
+								"books",
+								"updateBook"
 							]
 						}
 					},

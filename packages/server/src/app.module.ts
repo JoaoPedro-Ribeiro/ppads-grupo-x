@@ -3,7 +3,8 @@ import { UsersModule } from './modules/users/users.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { ConfigModule } from '@nestjs/config'
 import { DynamodbModule } from './modules/dynamodb/dynamodb.module'
-import { CategoriesModule } from './modules/books/categories/categories.module'
+import { CategoriesModule } from './modules/categories/categories.module'
+import { BooksModule } from './modules/books/books.module'
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { CategoriesModule } from './modules/books/categories/categories.module'
     UsersModule,
     AuthModule,
     CategoriesModule,
+    BooksModule,
     DynamodbModule
   ]
 })
