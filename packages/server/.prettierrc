@@ -1,6 +1,8 @@
 {
   "singleQuote": true,
-  "trailingComma": "all",
-  "semi": false
+  "trailingComma": "none",
+  "semi": false,
+  "endOfLine": "auto",
+  "eol-last": true,
+  "no-trailing-spaces": true
 }
-

@@ -12,13 +12,13 @@ import * as AWS from 'aws-sdk'
         AWS.config.update({
           region: configService.get<string>('AWS_REGION'),
           accessKeyId: configService.get<string>('AWS_ACCESS_KEY_ID'),
-          secretAccessKey: configService.get<string>('AWS_SECRET_ACCESS_KEY'),
+          secretAccessKey: configService.get<string>('AWS_SECRET_ACCESS_KEY')
         })
         return new AWS.DynamoDB.DocumentClient()
       },
-      inject: [ConfigService],
-    },
+      inject: [ConfigService]
+    }
   ],
-  exports: ['DYNAMODB'],
+  exports: ['DYNAMODB']
 })
 export class DynamodbModule {}

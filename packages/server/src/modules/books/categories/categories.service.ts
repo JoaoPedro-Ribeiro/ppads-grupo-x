@@ -6,7 +6,8 @@ export class CategoriesService {
   constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
   async findAllCategories() {
-    const { success, data } = await this.categoriesRepository.readAllCategories()
+    const { success, data } =
+      await this.categoriesRepository.readAllCategories()
 
     if (success) {
       return { success, data }
