@@ -1,8 +1,8 @@
-import './Home.css';
-import Menu from '../../Components/Menu/Menu.jsx';
-import UserMenu from '../../Components/UserMenu/UserMenu.jsx';
-import SearchBar from '../../Components/SearchBar/SearchBar.jsx';
-import Add from '../../Components/Add/Add.jsx';
+import './Home.css'
+import Menu from '../../Components/Menu/Menu.jsx'
+import UserMenu from '../../Components/UserMenu/UserMenu.jsx'
+import SearchBar from '../../Components/SearchBar/SearchBar.jsx'
+import Add from '../../Components/Add/Add.jsx'
 
 function Home() {
   return (
@@ -16,7 +16,7 @@ function Home() {
         <Add />
       </div>
     </div>
-  );
+  )
 }
 
-export default Home;
+export default Home
