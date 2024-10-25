@@ -28,10 +28,13 @@
   ],
   "license": "MIT",
   "private": true,
-  "workspaces":{
+  "workspaces": {
     "packages": [
       "packages/*",
       "packages/shared/*"
     ]
+  },
+  "dependencies": {
+    "dynamoose": "^4.0.2"
   }
 }
