@@ -6,6 +6,7 @@ import { UpdatePasswordDto } from './dto/updatePassword.dto'
 import { UsersRepository } from '../dynamodb/repositories/usersRepository'
 import * as bcrypt from 'bcrypt'
 import { LoginDto } from './dto/login.dto'
+import { ErrorsService } from '../errors/errors.service'
 
 @Injectable()
 export class AuthService {
@@ -25,7 +26,11 @@ export class AuthService {
     const { success: userFound, data } =
       await this.usersRepository.getUserByEmail(input.email)
 
-    if (!userFound || !bcryptCompareSync(input.password, data.password)) {
+    if (!userFound) {
+      throw ErrorsService.userNotFound()
+    }
+
+    if (!bcryptCompareSync(input.password, data.password)) {
       throw new UnauthorizedException()
     }
 
