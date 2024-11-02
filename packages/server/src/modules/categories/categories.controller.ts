@@ -1,5 +1,5 @@
-import { Controller, Get, Query, NotFoundException } from '@nestjs/common';
-import { CategoriesService } from './categories.service';
+import { Controller, Get, Query, NotFoundException } from '@nestjs/common'
+import { CategoriesService } from './categories.service'
 
 @Controller('books/categories')
 export class CategoriesController {
@@ -7,17 +7,17 @@ export class CategoriesController {
 
   @Get()
   async getAllCategories() {
-    return await this.categoriesService.findAllCategories();
+    return await this.categoriesService.findAllCategories()
   }
 
   @Get('findById')
   async findById(@Query('id') id: string) {
-    const category = await this.categoriesService.findCategoryById(id);
+    const category = await this.categoriesService.findCategoryById(id)
 
     if (!category) {
-      throw new NotFoundException('Category not found');
+      throw new NotFoundException('Category not found')
     }
 
-    return category;
+    return category
   }
 }

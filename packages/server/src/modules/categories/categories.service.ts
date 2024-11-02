@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { CategoriesRepository } from '../dynamodb/repositories/categoriesRepository'
-import { Category } from '../dynamodb/repositories/category.interface';
+import { Category } from '../dynamodb/repositories/category.interface'
 
 @Injectable()
 export class CategoriesService {
@@ -17,7 +17,7 @@ export class CategoriesService {
   }
 
   async findCategoryById(id: string): Promise<Category | null> {
-    const category = await this.categoriesRepository.findOne({ id });
-    return category;
+    const category = await this.categoriesRepository.findOne({ id })
+    return category
   }
 }
