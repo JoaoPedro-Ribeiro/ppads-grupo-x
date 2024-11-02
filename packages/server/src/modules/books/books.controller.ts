@@ -31,4 +31,9 @@ export class BooksController {
   updateBook(@Body() input: InputUpdateBookDto) {
     return this.booksService.updateBook(input)
   }
+
+  async searchBooks(@Query('title') title: string) {
+    const books = await this.booksService.findBooksByTitle(title)
+    return books
+  }
 }

@@ -3,6 +3,7 @@ import { InputCreateBookDto } from './dto/inputCreateBook.dto'
 import { BooksRepository } from '../dynamodb/repositories/booksRepository'
 import { v4 as uuid } from 'uuid'
 import { InputUpdateBookDto } from './dto/inputUpdateBook.dto'
+import { BookModel } from './book.schema'
 
 @Injectable()
 export class BooksService {
@@ -61,5 +62,10 @@ export class BooksService {
     }
 
     return { success: true, message: 'Book updated successfully' }
+  }
+
+  async findBooksByTitle(title: string): Promise<any> {
+    const books = await BookModel.scan('title').contains(title).exec()
+    return books
   }
 }
