@@ -7,13 +7,15 @@ import {
   Query,
   Put,
   UseInterceptors,
-  UploadedFile
+  UploadedFile,
+  UseGuards
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { BooksService } from './books.service'
 import { InputCreateBookDto } from './dto/inputCreateBook.dto'
 import { InputUpdateBookDto } from './dto/inputUpdateBook.dto'
 import { S3Service } from '../s3/s3.service'
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 
 @Controller('books')
 export class BooksController {
@@ -24,6 +26,7 @@ export class BooksController {
 
   @Post('createBook')
   @UseInterceptors(FileInterceptor('cover'))
+  @UseGuards(JwtAuthGuard)
   async createBook(
     @Body() input: InputCreateBookDto,
     @UploadedFile() file: Express.Multer.File
@@ -43,27 +46,32 @@ export class BooksController {
   }
 
   @Get('getAllBooks')
+  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.booksService.findAll()
   }
 
   @Get('getBooksByCategory')
+  @UseGuards(JwtAuthGuard)
   findBooksByCategory(@Query('category') category: number) {
     return this.booksService.findBooksByCategory(Number(category))
   }
 
   @Delete('deleteBook')
+  @UseGuards(JwtAuthGuard)
   remove(@Query('id') id: string) {
     return this.booksService.delete(id)
   }
 
   @Put('updateBook')
+  @UseGuards(JwtAuthGuard)
   updateBook(@Body() input: InputUpdateBookDto) {
     return this.booksService.updateBook(input)
   }
 
-  async searchBooks(@Query('title') title: string) {
-    const books = await this.booksService.findBooksByTitle(title)
-    return books
+  @UseGuards(JwtAuthGuard)
+  @Get('searchBookByTitle')
+  searchBookByTitle(@Query('title') title: string) {
+    return this.booksService.findBooksByTitle(title)
   }
 }
