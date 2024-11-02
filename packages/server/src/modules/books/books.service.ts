@@ -1,21 +1,19 @@
 import { Injectable } from '@nestjs/common'
 import { InputCreateBookDto } from './dto/inputCreateBook.dto'
 import { BooksRepository } from '../dynamodb/repositories/booksRepository'
-import { v4 as uuid } from 'uuid'
 import { InputUpdateBookDto } from './dto/inputUpdateBook.dto'
 import { BookModel } from './book.schema'
+import { S3Service } from '../s3/s3.service'
 
 @Injectable()
 export class BooksService {
-  constructor(private readonly booksRepository: BooksRepository) {}
+  constructor(
+    private readonly booksRepository: BooksRepository,
+    private readonly s3Service: S3Service
+  ) {}
 
   async create(input: InputCreateBookDto) {
-    const newBook = {
-      ...input,
-      id: uuid()
-    }
-
-    const { success } = await this.booksRepository.createBook(newBook)
+    const { success } = await this.booksRepository.createBook(input)
 
     if (!success) {
       return { success: false, message: 'Failed to create book' }
@@ -44,12 +42,23 @@ export class BooksService {
   }
 
   async delete(id: string) {
-    const { success: deletionSuccess } =
+    const { success: findBookSuccess, data: bookInfo } =
+      await this.booksRepository.findBookById(id)
+
+    if (!findBookSuccess || !bookInfo) {
+    }
+
+    const startIndex = bookInfo.coverUrl.indexOf('.com/') + 5
+    const filePath = bookInfo.coverUrl.substring(startIndex)
+
+    const { success: bookDeletionSuccess } =
       await this.booksRepository.deleteBookById(id)
 
-    if (!deletionSuccess) {
+    if (!bookDeletionSuccess) {
       return { success: false, message: 'Failed to delete book' }
     }
+
+    await this.s3Service.deleteFile(filePath)
 
     return { success: true, message: 'Book deleted successfully' }
   }

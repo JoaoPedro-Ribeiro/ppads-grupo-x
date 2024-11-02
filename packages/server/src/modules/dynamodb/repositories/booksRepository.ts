@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
+import { InputCreateBookDto } from 'src/modules/books/dto/inputCreateBook.dto'
 import { InputUpdateBookDto } from 'src/modules/books/dto/inputUpdateBook.dto'
+import { v4 as uuid } from 'uuid'
 
 @Injectable()
 export class BooksRepository {
@@ -11,10 +13,17 @@ export class BooksRepository {
     this.db = dynamoDb
   }
 
-  async createBook(data = {}): Promise<{ success: boolean }> {
+  async createBook(data: InputCreateBookDto): Promise<{ success: boolean }> {
     const params = {
       TableName: this.table,
-      Item: data
+      Item: {
+        id: uuid(),
+        name: data.name,
+        description: data.description,
+        category: Number(data.category),
+        amount: Number(data.amount),
+        coverUrl: data.coverUrl
+      }
     }
 
     try {
@@ -36,6 +45,26 @@ export class BooksRepository {
       return { success: true, data: Items }
     } catch (error) {
       console.debug('BooksRepository :: findAllBooks :: DynamoError -> ', error)
+      return { success: false, data: null }
+    }
+  }
+
+  async findBookById(
+    id: string
+  ): Promise<{ success: boolean; data: any | null }> {
+    const params = {
+      TableName: this.table,
+      Key: {
+        id
+      }
+    }
+
+    try {
+      const result = await this.db.get(params).promise()
+      const book = result.Item || null
+      return { success: true, data: book }
+    } catch (error) {
+      console.debug('BooksRepository :: findBookById :: DynamoError -> ', error)
       return { success: false, data: null }
     }
   }

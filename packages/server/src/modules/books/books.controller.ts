@@ -1,15 +1,45 @@
-import { Controller, Get, Post, Body, Delete, Query, Put } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Delete,
+  Query,
+  Put,
+  UseInterceptors,
+  UploadedFile
+} from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 import { BooksService } from './books.service'
 import { InputCreateBookDto } from './dto/inputCreateBook.dto'
 import { InputUpdateBookDto } from './dto/inputUpdateBook.dto'
+import { S3Service } from '../s3/s3.service'
 
 @Controller('books')
 export class BooksController {
-  constructor(private readonly booksService: BooksService) {}
+  constructor(
+    private readonly booksService: BooksService,
+    private readonly s3Service: S3Service
+  ) {}
 
   @Post('createBook')
-  createBook(@Body() input: InputCreateBookDto) {
-    return this.booksService.create(input)
+  @UseInterceptors(FileInterceptor('cover'))
+  async createBook(
+    @Body() input: InputCreateBookDto,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    let coverUrl = null
+
+    if (file) {
+      coverUrl = await this.s3Service.uploadFile(file.buffer, file.originalname)
+    }
+
+    const bookData = {
+      ...input,
+      coverUrl
+    }
+
+    return this.booksService.create(bookData)
   }
 
   @Get('getAllBooks')
