@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { UsersModule } from 'src/modules/users/users.module'
 import { UsersRepository } from '../dynamodb/repositories/usersRepository'
+import { ErrorsModule } from '../errors/errors.module'
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { UsersRepository } from '../dynamodb/repositories/usersRepository'
       }),
       inject: [ConfigService]
     }),
-    UsersModule
+    UsersModule,
+    ErrorsModule
   ],
   providers: [AuthService, UsersRepository],
   controllers: [AuthController]
