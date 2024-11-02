@@ -3,7 +3,6 @@ import { BooksService } from './books.service'
 import { InputCreateBookDto } from './dto/inputCreateBook.dto'
 import { InputUpdateBookDto } from './dto/inputUpdateBook.dto'
 
-
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
@@ -32,9 +31,9 @@ export class BooksController {
   updateBook(@Body() input: InputUpdateBookDto) {
     return this.booksService.updateBook(input)
   }
- 
+
   async searchBooks(@Query('title') title: string) {
-    const books = await this.booksService.findBooksByTitle(title);
-    return books;
+    const books = await this.booksService.findBooksByTitle(title)
+    return books
   }
 }

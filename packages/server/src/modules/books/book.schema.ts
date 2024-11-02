@@ -1,9 +1,9 @@
-import * as dynamoose from 'dynamoose';
+import * as dynamoose from 'dynamoose'
 
 const BookSchema = new dynamoose.Schema({
   id: {
-    type: String, 
-    hashKey: true 
+    type: String,
+    hashKey: true
   },
   title: {
     type: String,
@@ -13,10 +13,6 @@ const BookSchema = new dynamoose.Schema({
     type: String,
     required: true
   }
-});
+})
 
-export const BookModel = dynamoose.model('Book', BookSchema);
-
-
-
-
+export const BookModel = dynamoose.model('Book', BookSchema)
