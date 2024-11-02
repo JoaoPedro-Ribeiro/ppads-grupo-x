@@ -5,7 +5,7 @@ import { JwtModule } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { UsersModule } from 'src/modules/users/users.module'
 import { UsersRepository } from '../dynamodb/repositories/usersRepository'
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from './jwt.strategy'
 
 @Module({
   imports: [
