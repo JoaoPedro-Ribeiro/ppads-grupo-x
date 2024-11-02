@@ -55,11 +55,11 @@ export class UsersRepository {
       const result = await this.db.query(params).promise()
       const items = result.Items || []
 
-      if (items.length > 0) {
+      if (Array.isArray(items) && items.length > 0) {
         return { success: true, data: items[0] }
       }
 
-      return { success: true, data: null }
+      return { success: false, data: null }
     } catch (error) {
       console.debug(
         'UsersRepository :: getUserByEmail :: DynamoError -> ',
