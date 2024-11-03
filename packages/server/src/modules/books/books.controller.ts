@@ -31,7 +31,7 @@ export class BooksController {
     @Body() input: InputCreateBookDto,
     @UploadedFile() file: Express.Multer.File
   ) {
-    let coverUrl = null
+    let coverUrl = ''
 
     if (file) {
       coverUrl = await this.s3Service.uploadFile(file.buffer, file.originalname)
@@ -43,6 +43,30 @@ export class BooksController {
     }
 
     return this.booksService.create(bookData)
+  }
+
+  @Put('updateBook')
+  @UseInterceptors(FileInterceptor('cover'))
+  @UseGuards(JwtAuthGuard)
+  async updateBook(
+    @Body() input: InputUpdateBookDto,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    let coverUrl = ''
+    let bookData = {
+      ...input
+    }
+
+    if (file) {
+      coverUrl = await this.s3Service.uploadFile(file.buffer, file.originalname)
+
+      bookData = {
+        ...input,
+        coverUrl
+      }
+    }
+
+    return this.booksService.updateBook(bookData)
   }
 
   @Get('getAllBooks')
@@ -61,12 +85,6 @@ export class BooksController {
   @UseGuards(JwtAuthGuard)
   remove(@Query('id') id: string) {
     return this.booksService.delete(id)
-  }
-
-  @Put('updateBook')
-  @UseGuards(JwtAuthGuard)
-  updateBook(@Body() input: InputUpdateBookDto) {
-    return this.booksService.updateBook(input)
   }
 
   @UseGuards(JwtAuthGuard)

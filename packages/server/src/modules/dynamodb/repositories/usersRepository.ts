@@ -1,38 +1,22 @@
-import { Injectable, Inject } from '@nestjs/common'
-import { DocumentClient } from 'aws-sdk/clients/dynamodb'
+import { Injectable } from '@nestjs/common'
+import { UsersModel } from '../schemas/users.schema'
 
 @Injectable()
 export class UsersRepository {
-  private readonly db: DocumentClient
-  private readonly table = 'users'
-
-  constructor(@Inject('DYNAMODB') private readonly dynamoDb: DocumentClient) {
-    this.db = dynamoDb
-  }
-
-  async createUsers(data = {}): Promise<{ success: boolean }> {
-    const params = {
-      TableName: this.table,
-      Item: data
-    }
-
+  async createUser(data: any): Promise<{ success: boolean }> {
     try {
-      await this.db.put(params).promise()
+      await UsersModel.create(data)
       return { success: true }
     } catch (error) {
-      console.debug('UsersRepository :: createUsers :: DynamoError -> ', error)
+      console.debug('UsersRepository :: createUser :: DynamoError -> ', error)
       return { success: false }
     }
   }
 
   async readAllUsers(): Promise<{ success: boolean; data: any[] }> {
-    const params = {
-      TableName: this.table
-    }
-
     try {
-      const { Items = [] } = await this.db.scan(params).promise()
-      return { success: true, data: Items }
+      const users = await UsersModel.scan().exec()
+      return { success: true, data: users }
     } catch (error) {
       console.debug('UsersRepository :: readAllUsers :: DynamoError -> ', error)
       return { success: false, data: null }
@@ -42,24 +26,13 @@ export class UsersRepository {
   async getUserByEmail(
     email: string
   ): Promise<{ success: boolean; data: any }> {
-    const params = {
-      TableName: this.table,
-      IndexName: 'EmailIndex',
-      KeyConditionExpression: 'email = :email',
-      ExpressionAttributeValues: {
-        ':email': email
-      }
-    }
-
     try {
-      const result = await this.db.query(params).promise()
-      const items = result.Items || []
+      const user = await UsersModel.query('email').eq(email).exec()
 
-      if (Array.isArray(items) && items.length > 0) {
-        return { success: true, data: items[0] }
+      if (user.length > 0) {
+        return { success: true, data: user[0] }
       }
-
-      return { success: false, data: null }
+      return { success: true, data: null }
     } catch (error) {
       console.debug(
         'UsersRepository :: getUserByEmail :: DynamoError -> ',
@@ -72,49 +45,26 @@ export class UsersRepository {
   async getIdByEmail(
     email: string
   ): Promise<{ success: boolean; id: string | null }> {
-    const params = {
-      TableName: this.table,
-      IndexName: 'EmailIndex',
-      KeyConditionExpression: 'email = :email',
-      ExpressionAttributeValues: {
-        ':email': email
-      }
+    const result = await this.getUserByEmail(email)
+    if (result.success && result.data) {
+      return { success: true, id: result.data.id }
     }
-
-    try {
-      const result = await this.db.query(params).promise()
-      const items = result.Items || []
-
-      if (items.length > 0) {
-        return { success: true, id: items[0].id }
-      }
-
-      return { success: false, id: null }
-    } catch (error) {
-      console.debug('UsersRepository :: getIdByEmail :: DynamoError -> ', error)
-      return { success: false, id: null }
-    }
+    return { success: false, id: null }
   }
 
   async deleteUserByEmail(
     email: string
   ): Promise<{ success: boolean; message?: string }> {
-    const { success, id } = await this.getIdByEmail(email)
+    const { success, data } = await this.getUserByEmail(email)
+
+    const { id } = data
 
     if (!success || !id) {
       return { success: false, message: 'User not found' }
     }
 
-    const params = {
-      TableName: this.table,
-      Key: {
-        id: id,
-        email: email
-      }
-    }
-
     try {
-      await this.db.delete(params).promise()
+      await UsersModel.delete({ id, email })
       return { success: true }
     } catch (error) {
       console.debug(
@@ -130,29 +80,12 @@ export class UsersRepository {
     newPassword: string
   }): Promise<{ success: boolean; message?: string }> {
     const { success, id } = await this.getIdByEmail(input.email)
-
     if (!success || !id) {
       return { success: false, message: 'User not found' }
     }
 
-    const params = {
-      TableName: this.table,
-      Key: {
-        id: id,
-        email: input.email
-      },
-      UpdateExpression: 'set #password = :newPassword',
-      ExpressionAttributeNames: {
-        '#password': 'password'
-      },
-      ExpressionAttributeValues: {
-        ':newPassword': input.newPassword
-      },
-      ReturnValues: 'UPDATED_NEW'
-    }
-
     try {
-      await this.db.update(params).promise()
+      await UsersModel.update(id, { password: input.newPassword })
       return { success: true, message: 'Password updated successfully' }
     } catch (error) {
       console.debug(
