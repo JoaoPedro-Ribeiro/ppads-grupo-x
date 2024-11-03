@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { compareSync as bcryptCompareSync } from 'bcrypt'
 import { ConfigService } from '@nestjs/config'
@@ -31,7 +31,7 @@ export class AuthService {
     }
 
     if (!bcryptCompareSync(input.password, data.password)) {
-      throw new UnauthorizedException()
+      throw ErrorsService.failToLogin()
     }
 
     const payload = {
@@ -42,7 +42,7 @@ export class AuthService {
     }
     const token = this.jwtService.sign(payload)
 
-    return { token, expiresIn: this.jwtExpirationTimeInSeconds }
+    return { success: true, token, expiresIn: this.jwtExpirationTimeInSeconds }
   }
 
   async updatePassword(input: UpdatePasswordDto) {
@@ -51,7 +51,7 @@ export class AuthService {
     )
 
     if (!userFound) {
-      return { success: false, message: 'User not found!' }
+      throw ErrorsService.userNotFound()
     }
 
     input.newPassword = bcrypt.hashSync(input.newPassword, 10)
@@ -59,7 +59,7 @@ export class AuthService {
     const { success } = await this.usersRepository.updatePassword(input)
 
     if (!success) {
-      return { success: false, message: 'Failed to change password' }
+      throw ErrorsService.failToChangePassword()
     }
 
     return { success: true, message: 'Password updated successfully' }

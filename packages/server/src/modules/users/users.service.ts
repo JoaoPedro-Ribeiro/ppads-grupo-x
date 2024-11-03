@@ -3,6 +3,7 @@ import { UserDto } from './dto/user.dto'
 import { v4 as uuid } from 'uuid'
 import * as bcrypt from 'bcrypt'
 import { UsersRepository } from '../dynamodb/repositories/usersRepository'
+import { ErrorsService } from '../errors/errors.service'
 
 @Injectable()
 export class UsersService {
@@ -18,24 +19,14 @@ export class UsersService {
 
     const isEmailAlreadyInUse = await this.emailValidation(newUser.email)
 
-    if (isEmailAlreadyInUse === null) {
-      return {
-        success: false,
-        message: 'Something went wrong'
-      }
-    }
-
     if (isEmailAlreadyInUse) {
-      return {
-        success: false,
-        message: 'Email Already In Use'
-      }
+      throw ErrorsService.emailAlreadyInUse()
     }
 
     const { success } = await this.usersRepository.createUser(newUser)
 
     if (!success) {
-      return { success: false, message: 'Failed to create user' }
+      throw ErrorsService.failToCreateUser()
     }
 
     return { success: true, message: 'User created successfully' }
@@ -45,14 +36,14 @@ export class UsersService {
     const emailExists = await this.emailValidation(email)
 
     if (!emailExists) {
-      return { success: false, message: 'User does not exist!' }
+      throw ErrorsService.userNotFound()
     }
 
     const { success: deletionSuccess } =
       await this.usersRepository.deleteUserByEmail(email)
 
     if (!deletionSuccess) {
-      return { success: false, message: 'Failed to delete user' }
+      throw ErrorsService.failToDeleteUser()
     }
 
     return { success: true, message: 'User deleted successfully' }
@@ -64,7 +55,8 @@ export class UsersService {
     if (success) {
       return { success, data }
     }
-    return null
+
+    throw ErrorsService.dynamoError()
   }
 
   async emailValidation(email: string) {
@@ -74,6 +66,6 @@ export class UsersService {
       return data?.email === email
     }
 
-    return null
+    throw ErrorsService.dynamoError()
   }
 }

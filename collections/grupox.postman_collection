@@ -40,6 +40,10 @@
 									"pm.test(\"expiresIn is a non-negative integer\", function () {\r",
 									"    const responseData = pm.response.json();\r",
 									"    pm.expect(responseData.expiresIn).to.be.a('number').and.to.be.at.least(0, \"expiresIn should be a non-negative integer\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Success field is true\", function () {\r",
+									"    pm.expect(pm.response.json().success).to.be.true;\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -252,8 +256,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Response status code is 201\", function () { //mudar dps o código\r",
-									"    pm.expect(pm.response.code).to.equal(201);\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Response has the required fields - success and message\", function () {\r",
@@ -294,7 +298,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"rebeca@teste.com\"\r\n}",
+							"raw": "{\r\n    \"email\": \"teste2@ppads.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -427,7 +431,10 @@
 									"pm.test(\"Response status code is 200\", function () {\r",
 									"  pm.expect(pm.response.code).to.equal(200);\r",
 									"});\r",
-									""
+									"\r",
+									"pm.test(\"Success field is true\", function () {\r",
+									"    pm.expect(pm.response.json().success).to.be.true;\r",
+									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -563,7 +570,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Response status code is 201\", function () { //mudar dps o código\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
 									"    pm.expect(pm.response.code).to.equal(201);\r",
 									"});\r",
 									"\r",
@@ -613,7 +620,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url-backend}}/books/deleteBook/?id=f0c563be-d647-460a-9ef3-2e251eb933cf",
+							"raw": "{{url-backend}}/books/deleteBook/?id=94326135-7b29-4675-84f0-8f4bf52c7fb8",
 							"host": [
 								"{{url-backend}}"
 							],
@@ -625,7 +632,7 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "f0c563be-d647-460a-9ef3-2e251eb933cf"
+									"value": "94326135-7b29-4675-84f0-8f4bf52c7fb8"
 								}
 							]
 						}
