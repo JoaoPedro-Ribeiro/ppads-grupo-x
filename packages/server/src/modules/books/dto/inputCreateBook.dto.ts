@@ -18,6 +18,7 @@ export class InputCreateBookDto {
 
   @IsInt()
   @IsNotEmpty()
+  @IsPositive()
   @Transform(({ value }) => parseInt(value, 10))
   category: number
 

@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  Query,
-  NotFoundException,
-  UseGuards
-} from '@nestjs/common'
+import { Controller, Get, Query, UseGuards } from '@nestjs/common'
 import { CategoriesService } from './categories.service'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 
@@ -20,13 +14,7 @@ export class CategoriesController {
 
   @UseGuards(JwtAuthGuard)
   @Get('findById')
-  async findById(@Query('id') id: string) {
-    const category = await this.categoriesService.findCategoryById(id)
-
-    if (!category) {
-      throw new NotFoundException('Category not found')
-    }
-
-    return category
+  async findById(@Query('category_id') category_id: number) {
+    return await this.categoriesService.findCategoryById(Number(category_id))
   }
 }
