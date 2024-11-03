@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InputCreateBookDto } from './dto/inputCreateBook.dto'
 import { BooksRepository } from '../dynamodb/repositories/booksRepository'
 import { InputUpdateBookDto } from './dto/inputUpdateBook.dto'
-import { BookModel } from './book.schema'
+import { BooksModel } from '../dynamodb/schemas/books.schema'
 import { S3Service } from '../s3/s3.service'
 
 @Injectable()
@@ -74,7 +74,6 @@ export class BooksService {
   }
 
   async findBooksByTitle(title: string): Promise<any> {
-    const books = await BookModel.scan('title').contains(title).exec()
-    return books
+    return await BooksModel.scan('name').contains(title).exec()
   }
 }

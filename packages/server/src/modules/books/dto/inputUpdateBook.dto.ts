@@ -1,10 +1,11 @@
 import {
   IsString,
   IsNotEmpty,
-  IsNumber,
   IsPositive,
-  IsOptional
+  IsOptional,
+  IsInt
 } from 'class-validator'
+import { Transform } from 'class-transformer'
 
 export class InputUpdateBookDto {
   @IsString()
@@ -21,20 +22,21 @@ export class InputUpdateBookDto {
   @IsOptional()
   description: string
 
-  @IsNumber()
+  @IsInt()
   @IsPositive()
   @IsNotEmpty()
   @IsOptional()
+  @Transform(({ value }) => parseInt(value, 10))
   category: number
 
-  @IsNumber()
   @IsPositive()
   @IsNotEmpty()
   @IsOptional()
+  @Transform(({ value }) => parseFloat(value))
   amount: number
 
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  path: string
+  coverUrl: string
 }

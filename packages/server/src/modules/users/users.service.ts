@@ -32,7 +32,7 @@ export class UsersService {
       }
     }
 
-    const { success } = await this.usersRepository.createUsers(newUser)
+    const { success } = await this.usersRepository.createUser(newUser)
 
     if (!success) {
       return { success: false, message: 'Failed to create user' }
