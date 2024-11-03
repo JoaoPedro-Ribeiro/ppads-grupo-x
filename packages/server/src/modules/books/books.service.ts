@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common'
 import { InputCreateBookDto } from './dto/inputCreateBook.dto'
 import { BooksRepository } from '../dynamodb/repositories/booksRepository'
 import { InputUpdateBookDto } from './dto/inputUpdateBook.dto'
-import { BooksModel } from '../dynamodb/schemas/books.schema'
 import { S3Service } from '../s3/s3.service'
+import { ErrorsService } from '../errors/errors.service'
 
 @Injectable()
 export class BooksService {
@@ -16,7 +16,7 @@ export class BooksService {
     const { success } = await this.booksRepository.createBook(input)
 
     if (!success) {
-      return { success: false, message: 'Failed to create book' }
+      throw ErrorsService.failToCreateBook()
     }
 
     return { success: true, message: 'Book created successfully' }
@@ -28,7 +28,7 @@ export class BooksService {
     if (success) {
       return { success, data }
     }
-    return null
+    throw ErrorsService.dynamoError()
   }
 
   async findBooksByCategory(category: number) {
@@ -38,7 +38,7 @@ export class BooksService {
     if (success) {
       return { success, data }
     }
-    return null
+    throw ErrorsService.dynamoError()
   }
 
   async delete(id: string) {
@@ -46,6 +46,7 @@ export class BooksService {
       await this.booksRepository.findBookById(id)
 
     if (!findBookSuccess || !bookInfo) {
+      throw ErrorsService.bookNotFound()
     }
 
     const startIndex = bookInfo.coverUrl.indexOf('.com/') + 5
@@ -55,7 +56,7 @@ export class BooksService {
       await this.booksRepository.deleteBookById(id)
 
     if (!bookDeletionSuccess) {
-      return { success: false, message: 'Failed to delete book' }
+      throw ErrorsService.failToDeleteBook()
     }
 
     await this.s3Service.deleteFile(filePath)
@@ -67,13 +68,19 @@ export class BooksService {
     const { success } = await this.booksRepository.updateBook(input)
 
     if (!success) {
-      return { success: false, message: 'Failed to update book' }
+      throw ErrorsService.failToUpdateBook()
     }
 
     return { success: true, message: 'Book updated successfully' }
   }
 
   async findBooksByTitle(title: string): Promise<any> {
-    return await BooksModel.scan('name').contains(title).exec()
+    const { success, data } = await this.booksRepository.findBooksByTitle(title)
+
+    if (!success) {
+      throw ErrorsService.dynamoError()
+    }
+
+    return { success: true, data }
   }
 }

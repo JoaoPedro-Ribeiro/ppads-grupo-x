@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { S3Service } from './s3.service'
 import { S3Client } from '@aws-sdk/client-s3'
 import { ConfigService } from '@nestjs/config'
+import { ErrorsModule } from '../errors/errors.module'
 
 @Module({
   providers: [
@@ -22,6 +23,7 @@ import { ConfigService } from '@nestjs/config'
     },
     S3Service
   ],
-  exports: ['S3_CLIENT', S3Service]
+  exports: ['S3_CLIENT', S3Service],
+  imports: [ErrorsModule]
 })
 export class S3Module {}

@@ -85,7 +85,10 @@ export class UsersRepository {
     }
 
     try {
-      await UsersModel.update(id, { password: input.newPassword })
+      await UsersModel.update(
+        { id, email: input.email },
+        { password: input.newPassword }
+      )
       return { success: true, message: 'Password updated successfully' }
     } catch (error) {
       console.debug(

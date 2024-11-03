@@ -97,4 +97,17 @@ export class BooksRepository {
       return { success: false, message: 'Erro ao atualizar o livro' }
     }
   }
+
+  async findBooksByTitle(title: string) {
+    try {
+      const books = await await BooksModel.scan('name').contains(title).exec()
+      return { success: true, data: books }
+    } catch (error) {
+      console.debug(
+        'BooksRepository :: findBooksByTitle :: DynamoError -> ',
+        error
+      )
+      return { success: false, data: [] }
+    }
+  }
 }

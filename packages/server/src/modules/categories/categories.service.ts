@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { CategoriesRepository } from '../dynamodb/repositories/categoriesRepository'
-import { Category } from './interfaces/category.interface'
+import { ErrorsService } from '../errors/errors.service'
 
 @Injectable()
 export class CategoriesService {
@@ -13,10 +13,21 @@ export class CategoriesService {
     if (success) {
       return { success, data }
     }
-    return { success: false, message: 'Falha ao buscar categorias' }
+    throw ErrorsService.dynamoError()
   }
 
-  async findCategoryById(category_id: number): Promise<Category | null> {
-    return await this.categoriesRepository.findById(category_id)
+  async findCategoryById(category_id: number) {
+    const { success, data } =
+      await this.categoriesRepository.findById(category_id)
+
+    if (success && data != null) {
+      return { success, data }
+    }
+
+    if (success && data === null) {
+      throw ErrorsService.categoryNoFound()
+    }
+
+    throw ErrorsService.dynamoError()
   }
 }

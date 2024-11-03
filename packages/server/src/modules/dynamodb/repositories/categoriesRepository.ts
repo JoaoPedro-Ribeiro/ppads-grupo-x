@@ -20,10 +20,15 @@ export class CategoriesRepository {
     }
   }
 
-  async findById(category_id: number): Promise<Category | null> {
+  async findById(
+    category_id: number
+  ): Promise<{ success: boolean; data: Category | null }> {
     try {
       const category = await CategoriesModel.get({ category_id })
-      return category ? (category as unknown as Category) : null
+      return {
+        success: true,
+        data: category ? (category as unknown as Category) : null
+      }
     } catch (error) {
       console.error(
         'CategoriesRepository :: findById :: DynamoError -> ',

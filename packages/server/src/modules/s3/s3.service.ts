@@ -5,6 +5,7 @@ import {
   DeleteObjectCommand
 } from '@aws-sdk/client-s3'
 import { v4 as uuidv4 } from 'uuid'
+import { ErrorsService } from '../errors/errors.service'
 
 @Injectable()
 export class S3Service {
@@ -31,7 +32,7 @@ export class S3Service {
       return `https://${this.bucketName}.s3.amazonaws.com/${uniqueFileName}`
     } catch (error) {
       console.debug('S3 Service :: UploadCover :: S3Error -> ', error)
-      throw new Error('File upload failed')
+      throw ErrorsService.failToUploadFile()
     }
   }
 
@@ -45,7 +46,7 @@ export class S3Service {
       await this.s3.send(command)
     } catch (error) {
       console.debug('S3 Service :: DeleteFile :: S3Error -> ', error)
-      throw new Error('File deletion failed')
+      throw ErrorsService.failToDeleteFile()
     }
   }
 }
