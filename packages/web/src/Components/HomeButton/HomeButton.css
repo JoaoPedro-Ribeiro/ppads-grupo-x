@@ -1,0 +1,13 @@
+.home-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.home-icon {
+    width: 30px; 
+    height: 30px;
+} 

@@ -39,9 +39,8 @@ const Login = () => {
       } else {
         setErrorMessage("Login falhou. Verifique suas credenciais.")
       }
-    } catch (error) {
+    } catch {
       setErrorMessage("Erro ao fazer login. Tente novamente.")
-      console.log('Erro ao fazer login: ', error)
     }
   }
 
