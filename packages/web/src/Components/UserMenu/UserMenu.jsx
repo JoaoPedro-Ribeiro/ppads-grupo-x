@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
-
-import React, { useState, useEffect } from 'react'
-import { IconButton, Modal, Box, Button, Drawer } from '@mui/material'
+import { useState, useEffect } from 'react'
+import { IconButton, Modal, Box, Button, Drawer, Snackbar, Alert } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person'
 import api from '../../services/axios'
 import { jwtDecode } from 'jwt-decode'
@@ -18,11 +16,15 @@ function UserMenu() {
     const [isUserAdmin, setIsUserAdmin] = useState(false)
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
+    const [userEmail, setUserEmail] = useState("")
     const [password, setPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [isAdmin, setisAdmin] = useState(false)
     const [users, setUsers] = useState([])
     const navigate = useNavigate()
+    const [snackbarOpen, setSnackbarOpen] = useState(false)
+    const [snackbarMessage, setSnackbarMessage] = useState('')
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success')
 
     useEffect(() => {
         const jwtToken = localStorage.getItem('token')
@@ -30,22 +32,28 @@ function UserMenu() {
             const tokenPayload = jwtDecode(jwtToken)
             setUsername(tokenPayload.name)
             setIsUserAdmin(tokenPayload.isAdmin)
+            setUserEmail(tokenPayload.email)
         }
     }, [])
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await api.get(`${apiBaseUrl}/users/getAllUsers`, {})
-                setUsers(response.data.data)
-            } catch (error) {
-                console.error("Erro ao buscar usuários:", error)
-            }
-        }
         if (isUserAdmin) {
             fetchUsers()
         }
-    }, [isUserAdmin])
+    }, [isUserAdmin, userEmail])
+
+    const fetchUsers = async () => {
+        try {
+            const response = await api.get(`${apiBaseUrl}/users/getAllUsers`, {})
+            const filteredUsers = response.data.data.filter(user => user.email !== userEmail)
+            setUsers(filteredUsers)
+        } catch (error) {
+            console.error("Erro ao buscar usuários:", error)
+            if (error.response.status === 401) {
+                handleLogout()
+            }
+        }
+    }
 
     const handleSubmitCreateUser = async (event) => {
         event.preventDefault()
@@ -59,17 +67,24 @@ function UserMenu() {
                 password: password,
                 isAdmin: isAdmin
             }
-
             const response = await api.post(url, userData)
-
-            console.log("Usuário criado:", response.data)
-            setEmail("")
-            setName("")
-            setPassword("")
-            setisAdmin(false)
-            setManageUsersOpen(false)
+            if (response.data.success) {
+                handleSnackbarOpen('Usuário criado com sucesso!', 'success')
+                fetchUsers()
+                setEmail("")
+                setName("")
+                setPassword("")
+                setisAdmin(false)
+                setManageUsersOpen(false)
+            } else {
+                handleSnackbarOpen(`Erro ao criar usuário: ${response.data.message}`, 'error')
+            }
         } catch (error) {
-            console.error("Erro ao criar usuário:", error)
+            console.error("Erro ao criar usuário:", error.response ? error.response.data : error.message)
+            handleSnackbarOpen(`Erro ao criar usuário: ${error.response?.data?.message || 'Something went wrong'}`, 'error')
+            if (error.response.status === 401) {
+                handleLogout()
+            }
         }
     }
 
@@ -85,10 +100,20 @@ function UserMenu() {
 
             const response = await api.put(url, passwordData)
 
-            console.log("Senha redefinida:", response.data)
-            setManagePasswordOpen(false)
+            if (response.data.success) {
+                handleSnackbarOpen('Senha atualizada com sucesso!', 'success')
+                setEmail('')
+                setNewPassword('')
+                setManagePasswordOpen(false)
+            } else {
+                handleSnackbarOpen(`Erro ao atualizar senha: ${response.data.message}`, 'error')
+            }
         } catch (error) {
             console.error("Erro ao redefinir senha:", error)
+            handleSnackbarOpen(`Erro ao atualizar senha: ${error.response?.data?.message || 'Something went wrong'}`, 'error')
+            if (error.response.status === 401) {
+                handleLogout()
+            }
         }
     }
 
@@ -96,13 +121,19 @@ function UserMenu() {
         if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
             try {
                 const url = `${apiBaseUrl}/users/deleteUser`
-
-                const response = await api.post(url, { email: emailToDelete })
-
-                setUsers(users.filter(user => user.email !== emailToDelete))
-                console.log("Usuário excluído:", response.data)
+                const response = await api.delete(url, { data: { email: emailToDelete } })
+                if (response.data.success) {
+                    fetchUsers()
+                    handleSnackbarOpen('Usuário excluído com sucesso!', 'success')
+                } else {
+                    handleSnackbarOpen(`Erro ao excluir usuário: ${response.data.message}`, 'error')
+                }
             } catch (error) {
                 console.error("Erro ao excluir usuário:", error)
+                handleSnackbarOpen(`Erro ao excluir usuário: ${error.response?.data?.message || 'Something went wrong'}`, 'error')
+                if (error.response.status === 401) {
+                    handleLogout()
+                }
             }
         }
     }
@@ -134,6 +165,23 @@ function UserMenu() {
     const handleLogout = () => {
         localStorage.removeItem('token')
         navigate('/login')
+    }
+
+    const isFormValid = () => {
+        return name.trim() !== '' &&
+               email.trim() !== '' &&
+               password.trim() !== ''
+    }
+
+    const isPasswordFormValid = () => {
+        return email.trim() !== '' &&
+               newPassword.trim() !== ''
+    }
+
+    const handleSnackbarOpen = (message, severity) => {
+        setSnackbarMessage(message)
+        setSnackbarSeverity(severity)
+        setSnackbarOpen(true)
     }
 
     return (
@@ -181,13 +229,13 @@ function UserMenu() {
                                         </label>
                                     </div>
 
-                                    <button>CONFIRMAR</button>
+                                    <button disabled={!isFormValid()}>CONFIRMAR</button>
                                 </form>
                             </div>
                         </div>
                         <h2>USUÁRIOS</h2>
                         <div className='users-list'>
-                            {users.map((user) => (
+                            {users.sort((a, b) => a.email.localeCompare(b.email)).map((user) => (
                                 <div key={user.email} className="user-card">
                                     <IconButton onClick={() => handleDeleteUser(user.email)}>
                                         <CloseIcon sx={{color: 'var(--branco)'}}/>
@@ -208,19 +256,35 @@ function UserMenu() {
                             <div className='containerUser'>
                                 <form onSubmit={handleSubmitUpdatePassword}>
                                     <div className='input-field'>
-                                        <input type='email' placeholder='EMAIL' onChange={(e) => setEmail(e.target.value)} autoComplete="off"></input>
+                                        <input
+                                            type='email'
+                                            placeholder='EMAIL'
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            autoComplete="off"
+                                        />
                                     </div>
                                     <div className='input-field'>
-                                        <input type='password' placeholder='NOVA SENHA' onChange={(e) => setNewPassword(e.target.value)} autoComplete="off"></input>
+                                        <input
+                                            type='password'
+                                            placeholder='NOVA SENHA'
+                                            onChange={(e) => setNewPassword(e.target.value)}
+                                            autoComplete="off"
+                                        />
                                     </div>
 
-                                    <button >REDEFINIR</button>
+                                    <button disabled={!isPasswordFormValid()}>REDEFINIR</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </Box>
             </Modal>
+
+            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
+                <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </div>
     )
 }

@@ -19,7 +19,7 @@
 .HomeBody {
   display: flex;
   align-items: center;
-  width: 1000px;
+  width: 52%;
   gap: 20px;
   margin-bottom: 500px;
 }

@@ -4,3 +4,9 @@
     margin-bottom: 400px;
     margin-left: 240px;
 }
+
+@media (max-width: 1500px) {
+    .Login h1 {
+        display: none;
+    }
+}

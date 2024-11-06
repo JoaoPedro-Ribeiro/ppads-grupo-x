@@ -1,15 +1,15 @@
-/* eslint-disable no-unused-vars */
-
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { IconButton, Drawer, List, ListItemButton, ListItemText } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import api from '../../services/axios'
 import { apiBaseUrl } from '../../../externalUrls'
+import { useNavigate } from 'react-router-dom'
 import './Menu.css'
 
 function Menu() {
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [categorias, setCategorias] = useState([])
+    const navigate = useNavigate()
 
     useEffect(() => {
         const buscarCategorias = async () => {
@@ -34,11 +34,12 @@ function Menu() {
     }, [])
 
     const toggleDrawer = () => {
-      setDrawerOpen(!drawerOpen)
+        setDrawerOpen(!drawerOpen)
     }
 
-    const handleCategoriaClick = (categoria) => {
-      console.log('Categoria selecionada:', categoria)
+    const handleCategoriaClick = (categoryId) => {
+        navigate(`/search?category=${categoryId}`)
+        toggleDrawer()
     }
 
     return (
@@ -57,7 +58,7 @@ function Menu() {
                         <ListItemButton
                             key={categoria.category_id}
                             className="drawer-item"
-                            onClick={() => handleCategoriaClick(categoria.category)}
+                            onClick={() => handleCategoriaClick(categoria.category_id)}
                         >
                             <ListItemText className="drawer-text" primary={categoria.category} />
                         </ListItemButton>
