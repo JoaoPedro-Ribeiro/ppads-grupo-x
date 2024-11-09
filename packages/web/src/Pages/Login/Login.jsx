@@ -4,21 +4,24 @@ import Logintitle from '../../Components/Logintitle/Logintitle'
 import api from '../../services/axios'
 import { apiBaseUrl } from '../../../externalUrls'
 import './Login.css'
+import { Snackbar, Button } from '@mui/material'
 
 const Login = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
   const [stayLoggedIn, setStayLoggedIn] = useState(false)
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
   const navigate = useNavigate()
 
   const handleCheckboxChange = (event) => {
     setStayLoggedIn(event.target.checked)
     }
 
-
   const handleSubmit = async (event) => {
     event.preventDefault()
+
+    setSnackbarOpen(true)
 
     try {
       const url = `${apiBaseUrl}/auth/login`
@@ -42,6 +45,10 @@ const Login = () => {
     } catch {
       setErrorMessage("Erro ao fazer login. Tente novamente.")
     }
+  }
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false)
   }
 
   return (
@@ -72,6 +79,18 @@ const Login = () => {
         </div>
       </div>
     </div>
+
+    <Snackbar
+      open={snackbarOpen}
+      onClose={handleSnackbarClose}
+      message="Aguarde 1 minuto após a 1º tentativa de login para o início do servidor."
+      action={
+        <Button color="inherit" onClick={handleSnackbarClose}>
+          Fechar
+        </Button>
+      }
+      autoHideDuration={6000}
+    />
   </main>
   )
 }
