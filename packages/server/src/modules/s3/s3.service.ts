@@ -17,7 +17,13 @@ export class S3Service {
   }
 
   async uploadFile(fileBuffer: Buffer, fileName: string) {
-    const formattedFileName = fileName.replace(/ /g, '')
+    const formattedFileName = fileName
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .replace(/\s+/g, '')
+      .toLowerCase()
+
     const uniqueFileName = `${uuidv4()}-${formattedFileName}`
 
     const command = new PutObjectCommand({
