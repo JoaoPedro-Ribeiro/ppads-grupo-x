@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { InputCreateBookDto } from 'src/modules/books/dto/inputCreateBook.dto'
-import { InputUpdateBookDto } from 'src/modules/books/dto/inputUpdateBook.dto'
 import { v4 as uuid } from 'uuid'
 import { BooksModel } from '../schemas/books.schema'
 
@@ -8,9 +7,12 @@ import { BooksModel } from '../schemas/books.schema'
 export class BooksRepository {
   async createBook(data: InputCreateBookDto): Promise<{ success: boolean }> {
     try {
+      const normalizedName = this.normalizeString(data.name)
+
       await BooksModel.create({
         id: uuid(),
         ...data,
+        normalizedName,
         category: Number(data.category),
         amount: Number(data.amount)
       })
@@ -72,10 +74,10 @@ export class BooksRepository {
   }
 
   async updateBook(
-    input: InputUpdateBookDto
+    input: any
   ): Promise<{ success: boolean; message?: string }> {
     try {
-      const { id, ...updates } = input
+      const { id, name, ...updates } = input
       const existingBook = await BooksModel.get(id)
 
       if (!existingBook) {
@@ -90,6 +92,10 @@ export class BooksRepository {
         updates.amount = Number(updates.amount)
       }
 
+      if (name) {
+        updates.normalizedName = this.normalizeString(name)
+      }
+
       await BooksModel.update({ id }, updates)
       return { success: true }
     } catch (error) {
@@ -100,7 +106,11 @@ export class BooksRepository {
 
   async findBooksByTitle(title: string) {
     try {
-      const books = await await BooksModel.scan('name').contains(title).exec()
+      title = this.normalizeString(title)
+
+      const books = await await BooksModel.scan('normalizedName')
+        .contains(title)
+        .exec()
       return { success: true, data: books }
     } catch (error) {
       console.debug(
@@ -109,5 +119,12 @@ export class BooksRepository {
       )
       return { success: false, data: [] }
     }
+  }
+
+  private normalizeString(str: string): string {
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
   }
 }
