@@ -81,6 +81,7 @@ OBS: Vale lembrar que a maioria das rotas utiliza o bearer token, então é nece
 - [João Pedro Mantovani Dantas de Souza](https://www.linkedin.com/in/jpmantovani/)
 - [João Pedro Ribeiro](https://www.linkedin.com/in/joao-pr/)
 - [Jonatas Souza de Moraes](https://www.linkedin.com/in/jonatas-souza-de-moraes-69a539b2/)
+- [Kaique Mota Carvalho](https://br.linkedin.com/in/kaique-mota)
 
 ## Licenças
 
