@@ -77,7 +77,7 @@ export class BooksRepository {
     input: any
   ): Promise<{ success: boolean; message?: string }> {
     try {
-      const { id, name, ...updates } = input
+      const { id, ...updates } = input
       const existingBook = await BooksModel.get(id)
 
       if (!existingBook) {
@@ -92,8 +92,8 @@ export class BooksRepository {
         updates.amount = Number(updates.amount)
       }
 
-      if (name) {
-        updates.normalizedName = this.normalizeString(name)
+      if (updates?.name) {
+        updates.normalizedName = this.normalizeString(updates?.name)
       }
 
       await BooksModel.update({ id }, updates)
