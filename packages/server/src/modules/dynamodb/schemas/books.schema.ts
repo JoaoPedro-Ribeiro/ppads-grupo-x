@@ -9,6 +9,10 @@ const BooksSchema = new dynamoose.Schema({
     type: String,
     required: true
   },
+  normalizedName: {
+    type: String,
+    required: true
+  },
   description: {
     type: String,
     required: true
